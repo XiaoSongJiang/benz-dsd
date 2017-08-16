@@ -1,0 +1,63 @@
+<extend name="_Layout/main"/>
+
+<block name="main">
+	<style type="text/css">
+		.main {
+			margin-bottom: 80px;
+		}
+		.block {
+			background-color: #fff;
+			margin-top: 20px;
+		}
+		h4 {
+			margin-top: 3px;
+		}
+		th {
+			width: 20%;
+			text-align: center;
+		}
+		td {
+			width: 70%;
+			text-align: center;
+			/*padding-left: 20px;*/
+		}
+	</style>
+	<div class="col-md-10 block">
+		
+		<form action="<?php echo U('edit'); ?>" class="form-inline" method="post">
+		<table class="table table-bordered table table-striped table-hover">
+			
+			<tr>
+				<th>活动名称</th>
+				<td>赢取梅赛德斯－奔驰精品手表</td>
+			</tr>
+			<tr>
+				<th>开始时间</th>
+				<td>2016-01-05 00:00:00</td>
+			</tr>
+			<tr>
+				<th>结束时间</th>
+				<td>2016-02-05 24:00:00</td>
+			</tr>
+			<tr>
+				<th>活动中奖概率</th>
+				<td><input type="num" name="rate" style="text-align:center;" value="{$rate}"> % </td>
+			</tr>
+			<tr>
+				<th>每天最多中奖人数</th>
+				<td><input type="num" name="win_max" style="text-align:center;" value="{$win_max}"> 人 </td>
+			</tr>
+			<tr>
+				<th>奖品</th>
+				<td>奔驰精品手表</td>
+			</tr>
+		</table>
+		<input class="btn btn-primary ajax-post" type="submit" value="保存" target-form="form-inline">
+		</form>
+	</div>
+	
+	<div class="col-md-10">
+		
+	</div>
+	
+</block>

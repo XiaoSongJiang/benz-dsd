@@ -1,0 +1,85 @@
+<extend name="_Layout/main"/>
+
+<block name="main">
+	<style type="text/css">
+		.main {
+			margin-bottom: 80px;
+		}
+		.block {
+			background-color: #fff;
+			margin-top: 20px;
+		}
+		h4 {
+			margin-top: 3px;
+		}
+		th {
+			width: 20%;
+			text-align: center;
+		}
+		td {
+			width: 70%;
+			text-align: center;
+			/*padding-left: 20px;*/
+		}
+	</style>
+
+	<div class="col-md-10 block">
+		<fieldset>
+			<legend><h3>订单信息</h3></legend>
+			<table class="table table-bordered table table-striped table-hover">
+				<tr>
+					<th>服务经销商</th>
+					<td>{$dealer.dealer_name}</td>
+				</tr>
+				<tr>
+					<th>客户微信昵称</th>
+					<td>{$log.openid|getNickname}</td>
+				</tr>
+				<tr>
+					<th>工单号</th>
+					<td>{$log.wip}</td>
+				</tr>
+				<tr>
+					<th>服务类型</th>
+					<td>{$log.service_type}</td>
+				</tr>
+				<tr>
+					<th>订单状态</th>
+					<td>{$log.status|getLogStatus}</td>
+				</tr>
+				<tr>
+					<th>开始时间</th>
+					<td>{$log.start_timestamp|date='Y-m-d H:i:s',###}</td>
+				</tr>
+				<tr>
+					<th>客户提交时间</th>
+					<if condition="$log.complete_timestamp eq 0">
+					<td>暂无</td>
+					<else />
+					<td>{$log.complete_timestamp|date='Y-m-d H:i:s',###}</td>
+					</if>
+				</tr>
+				<tr>
+					<th>服务建议</th>
+					<td>{$log.remark|default='暂无'}</td>
+				</tr>
+				<tr>
+					<th>二维码</th>
+					<td><div id="code" style="padding:15px;"></div></td>
+				</tr>
+				
+			</table>
+		</fieldset>
+	</div>
+	<script type="text/javascript" src="__PUBLIC__/js/jquery.qrcode.min.js"></script>
+	<script type="text/javascript">
+
+		var id = "<?php echo $log['log_id'] ?>";
+		var wip = "<?php echo $log['wip'] ?>";
+		var sa = "<?php echo $log['sa_uid'] ?>";
+		var url = `http://benz.hexdo.com/home/index/qrcode/back/qrcode/id/${id}/wip/${wip}/sa/${sa}`;
+
+		$('#code').qrcode(url);
+
+	</script>
+</block>

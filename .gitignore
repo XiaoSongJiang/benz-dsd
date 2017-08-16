@@ -1,0 +1,7 @@
+.idea
+*.log
+/Runtime/
+/Uploads/*
+/node_modules/
+/Application/Common/Conf/db.php
+!*.md

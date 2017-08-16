@@ -1,0 +1,178 @@
+<extend name="_Layout/main"/>
+
+<block name="title"><title>{$meta_title}</title></block>
+<!-- 按钮深绿： #26714a -->
+<!-- 沙漏文字： #4da57f -->
+<!-- 文字灰色： #6d6d6d -->
+<!-- 渐进end :  #4aa680 -->
+
+<block name="style">
+  <style type="text/css">
+    body {
+      background-color: #fff;
+      height: 100%;
+    }
+    .btn-green {
+      background-color: #4aa680;
+      color: #fff;  
+    }
+    .top {
+      padding-left: 10px;
+    }
+    .top img {
+      width: 100%;    
+    }
+    .index-main .info {
+      margin-top: 1em;
+      padding-top: 4.5em;
+      text-align: center;
+    }
+    .index-main .tips{
+      font-size: 1.2em;
+      color: #6d6d6d;
+    }
+    .index-main p {
+      margin-bottom: 5px;
+    }
+
+    .sand-clock {
+      width: 30px;
+      height: 38px;
+      margin: 15px 0; 
+    }
+    .btn-experience {
+      width: 66%;
+      height: 40px;
+      margin-left: 17%;
+      margin-top: 20px;
+      font-size: 18px;
+    }
+    .log {
+      margin-top: 25px;
+      padding-bottom: 10px;
+      text-align: center;
+      color: #8e8e8e;
+      font-family: '黑体';
+      font-weight: 500;
+      font-size: 14px;
+    }
+    .log .title {
+      font-weight: 500;
+      font-size: 17px;
+      color: #8e8e8e;
+      padding-bottom: 10px;
+    }
+    .log .content {
+      padding: 1px 0;
+      color: #8e8e8e;
+      font-size: 15px;
+    }
+
+    .welcome {
+      width: 37%;
+    }
+    .sand {
+      width: 74%;
+    }
+    .tips {
+      width: 60%;
+    }
+
+    /* S5 适配 */
+    @media (max-width: 320px) { 
+      .index-main {
+        margin-top: -15px;
+      }       
+      .welcome {
+        width: 32%;
+      }
+      .sand {
+        width: 68%;
+      }
+      .tips {
+        width: 68%;
+      }
+      .sand-clock {
+        width: 22px;
+        height: 32px;
+        margin: 10px 0; 
+      }
+      .btn-experience {
+        width: 66%;
+        height: 40px;
+        margin-left: 17%;
+        margin-top: 15px;
+        font-size: 18px;
+      }
+      .log {
+        margin-top: 15px;
+      }
+      .log .title {
+        font-weight: 500;
+        font-size: 16px;
+        color: #8e8e8e;
+        padding-bottom: 10px;
+      }
+      .log .content {
+        font-size: 14px;
+      }
+    }
+  </style>
+</style>
+
+<block name="main">
+  <div class="top">
+    <img src="__HOME_IMG__/icon/logo.png" alt="">
+  </div>
+  <div class="index-main">
+    <div class="info">
+      <p><img class="welcome" src="__HOME_IMG__/icon/welcome.png" alt=""></p>
+      <p><img class="sand" src="__HOME_IMG__/icon/title.png" alt=""></p>
+      <img class="sand-clock" src="__HOME_IMG__/icon/sand-clock.png" alt="">
+      <p><img class="tips" src="__HOME_IMG__/icon/index-tip.png" alt=""></p>
+    </div>
+    <input class="btn-experience btn btn-ok" type="button" value="立即体验">
+  </div>
+  <if condition="$log neq null">
+    <div class="log">
+      <p class="title">上一次快修记录</p>
+      <p class="content">{$log.start_timestamp|date='Y/m/d',###} {$log.dealer_short} 基础{$log.service_type}保养</p>
+      <p class="content">服务单号{$log.wip} {$log.status|getLogStatus}</p>
+    </div>
+  </if>
+</block>
+
+<block name="script">
+  <script src="__HOME_JS__/jquery.rotate.min.js"></script>
+  <script type="text/javascript">
+    
+    $(function(){
+      var width = $(window).width();
+      $(".info").css('padding-top',width*160/570+'px');
+
+      $(".btn-experience").click(function(){
+        window.location.href = "<?php echo U('dealer'); ?>";
+      });
+
+      function rotate() {
+        var angle = 0;
+        var timer = setInterval(function() {
+          angle += 3;
+          if(angle > 180) {
+            clearInterval(timer);
+            return;
+          }
+          $(".sand-clock").rotate(angle);
+        },10);
+      }
+      var t = setInterval(function() {
+        rotate();
+      },3000);
+    });
+  </script>
+</block>
+
+
+
+
+

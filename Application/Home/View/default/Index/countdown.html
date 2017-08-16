@@ -1,0 +1,51 @@
+<extend name="_Layout/main"/>
+
+<block name="title"><title>{:C('WEB_SITE_TITLE')}－{:C('WEB_SITE_SLOGAN')}</title></block>
+
+<block name="style">
+    <style type="text/css">
+        .btn-green {
+            background-color: #4aa680;
+            color: #fff;
+        }
+        .container {
+            width: 800px;
+            margin: 20px auto;
+        }
+    </style>
+</block>
+<block name="main">
+    <h2>倒计时</h2>
+    <div class="counter">
+        <!-- days -->
+        <input class="knob days" data-readOnly="true" data-width="100" data-displayPrevious=true data-fgColor="#66EE66" data-skin="tron" data-thickness=".2" data-min="0" data-max="365" value="75">
+        <!-- hours -->
+        <input class="knob hour" data-readOnly="true" data-width="100" daton code！a-min="0" data-max="24" data-displayPrevious=true data-fgColor="#800080" data-skin="tron" data-thickness=".2" value="23">
+        <!-- minute -->
+        <input class="knob minute" data-readOnly="true" data-width="100" data-min="0" data-max="60" data-displayPrevious=true data-fgColor="#ffec03" data-skin="tron" data-thickness=".2" value="59">
+        <!-- second -->
+        <input class="knob second" data-readOnly="true" data-width="100" data-min="0" data-max="60" data-displayPrevious=true data-fgColor="#00CED1" data-skin="tron" data-thickness=".2" value="59">
+    </div>
+    <input class="code" type="text" value="generate two-dimension code！">
+    <input type="button" class="generate-code btn btn-success" value="生成二维码">
+    <input type="button" class="btn btn-green" value="确定">
+    <div id="code" style="padding:15px;"></div>
+    <script type="text/javascript" src="__PUBLIC__/js/countdown.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/js/jquery.knob.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/js/jquery.qrcode.min.js"></script>
+    <script type="text/javascript">
+        // 倒计时
+        $(".counter").ccountdown(2015,11,4,'15:35');
+        $(".knob").knob();
+        // 生成二维码
+        $('#code').qrcode("generate two-dimension code!");
+        $(".generate-code").click(function(event) {
+            $("#code").find('canvas').remove();
+            $('#code').qrcode($(".code").val());
+        });
+    </script>
+</block>
+
+
+   
+

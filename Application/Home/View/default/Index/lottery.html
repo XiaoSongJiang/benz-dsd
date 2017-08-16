@@ -1,0 +1,202 @@
+<extend name="_Layout/main"/>
+
+<block name="title"><title>{$meta_title}</title></block>
+
+<block name="style">
+  <style type="text/css">
+    body {
+	    width: 100%;
+	    background: url(__HOME_IMG__/icon/message-bg.png);
+	    background-size: cover;
+	    background-repeat: no-repeat;
+    }
+    .btn-green {
+      background-color: #4aa680;
+      color: #fff;  
+    }
+    .top {
+      padding-left: 10px;
+    }
+    .top img {
+      width: 100%;    
+    }
+    .main .info {
+      margin-top: 1em;
+      padding-top: 4em;
+      text-align: center;
+    }
+    /* 抽奖 */
+    .lottery {
+			display: inline-block;
+    }
+    .lottery img {
+    	width: 120px;
+    	height: auto;
+    	margin-top: 15px;
+    }
+
+		/* 抽中奖品提示 */
+		.congratulate {
+			position: relative;
+		}
+
+		/* 没抽中提示 */
+    .pity {
+      width: 100%;
+      height: 100px;
+      overflow: hidden;
+      position: relative;
+    }
+    .pity img {
+    	position: absolute;
+    	margin-top: -40px;
+    }
+
+    .ui.content {
+    	margin-top: 40%;
+    }
+    .ui.content.content-congratulate {
+      margin-top: 20%;
+    }
+
+    .to-life {
+      position: absolute;
+      width: 200px;
+      bottom: 30px;
+    }
+    .to-life img{
+    	width: 100%;
+    }
+
+    /* S5 适配 */
+    @media (max-width: 320px) { 
+      .ui.content {
+        margin-top: 20%;
+      }
+      .to-life {
+        bottom: 15px;
+      }
+      .ui.content.content-pity {
+        margin-top: 40%;
+      }
+    }
+  </style>
+</style>
+
+<block name="main">
+  <div class="top">
+    <img src="__HOME_IMG__/icon/logo.png" alt="">
+  </div>
+  <div class="main">
+    <div class="info">
+      <p><img src="__HOME_IMG__/lottery/lottery-title.png" alt="" style="width:75%;"></p>
+      <div class="lottery">
+      	<if condition="$lottery eq 1">
+					<img class="start-draw" src="__HOME_IMG__/lottery/gift-close.png" alt="">
+				<else/>
+          <!-- <img class="start-draw" src="__HOME_IMG__/lottery/gift-close.png" alt=""> -->
+					<img src="__HOME_IMG__/lottery/gift-open.png" alt="" style="margin-left:25px;">
+      	</if>
+      </div>
+      <p><img src="__HOME_IMG__/lottery/lottery-tips.png" alt="" style="width:75%;margin-top:20px;"></p>
+    </div>
+  </div>
+
+  <center class="to-life">
+    <img src="__HOME_IMG__/icon/to-life.png" alt="">
+  </center>
+
+  <div class="ui shadow">
+  	<div class="ui content content-pity" style="padding:10px 0 30px 0;">
+      <img src="__HOME_IMG__/lottery/award-pity.png" alt="" style="width:100%;">
+  		<!-- <div class="pity">
+  			<img src="__HOME_IMG__/lottery/ribbon.png" alt="" width="100%;">
+  			<div class="message" style="position:absolute;top:70px;width:100%;left:30px;">
+  				<img src="__HOME_IMG__/lottery/pity.png" alt="" style="width:80%;">
+  			</div>
+  		</div> -->
+  		<center>
+  			<input class="btn ui button button-success" type="button" value="关闭" style="margin-top:0;">
+  		</center>
+  	</div>
+  </div> 
+	
+  <div class="ui shadow">
+  	<div class="ui content content-congratulate" style="padding:30px 20px;">
+  		<div class="congratulate">
+  			<p><img src="__HOME_IMG__/lottery/congratulate.png" alt="" style="width:55%;margin-top:10px;"></p>
+  			<p><img src="__HOME_IMG__/lottery/award.png" alt="" style="width:55%;margin-top:6px;"></p>
+        <p><img src="__HOME_IMG__/lottery/award-watch.png" alt="" style="width:80%;margin-top:10px;"></p>
+  			<p><img src="__HOME_IMG__/lottery/award-tips.png" alt="" style="width:80%;margin-top:10px;"></p>
+  		</div>
+  		<center>
+  			<input class="btn ui button button-success" type="button" value="关闭">
+  		</center>
+  	</div>
+  </div> 
+
+</block>
+
+<block name="script">
+  <script type="text/javascript">
+    $(function(){
+
+    	width = $(window).width();
+      $(".to-life").css('left',(width-$(".to-life").width())/2);
+
+    	var pos = 20, speed = 80, timer;
+    	var shake = function(obj) {
+      	timer = setInterval(function(){
+      		pos = -pos;
+      		$(obj).animate({
+      			marginLeft: pos+'px'
+      		}, speed);
+      	}, speed);
+    	}
+      $('.start-draw').bind('click',function(){
+      	shake(this);
+      	var ajax_draw_url = "<?php echo U('Home/Common/draw') ?>"
+		    var ajax_param = {
+		      openid: "<?php echo session('openid'); ?>",
+		    }
+		    $.ajax({
+	        url: ajax_draw_url,
+	        data: ajax_param,
+		    })
+		    .done(function(res) {
+		    	setTimeout(function(){
+		    		clearInterval(timer);
+		    		$('.start-draw').animate({
+		      		marginLeft: 25,
+              // width: '140px',
+		      	},10).attr('src','__HOME_IMG__/lottery/gift-open.png').unbind('click');
+		        if(res.status == 1) {
+		          congratulate();
+		        }else{
+		        	pity();
+		        }
+		    	}, 1500);
+		    });
+      });
+      
+    });
+
+    var congratulate = function() {
+    	var shadow = $('.content-congratulate').parent('.shadow').show();
+    	$(shadow).find('.button-success').click(function() {
+    		$(shadow).hide();
+    	});
+    }
+
+    var pity = function() {
+    	var shadow = $('.content-pity').parent('.shadow').show();
+    	$(shadow).find('.button-success').click(function() {
+    		$(shadow).hide();
+    	});
+    }
+
+  </script>
+</block>
+
+
+

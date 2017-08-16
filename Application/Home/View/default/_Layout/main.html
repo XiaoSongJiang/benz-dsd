@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="zh">
+<head>
+    <meta charset="utf-8">
+    <block name="title"><title>{$meta_title}｜{:C('WEB_SITE_TITLE')}－{:C('WEB_SITE_SLOGAN')}</title></block>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta name="author" content="{:C('WEB_SITE_TITLE')}">
+    <!-- <meta name="keywords" content="{$meta_keywords}"> -->
+    <!-- <meta name="description" content="{$meta_description}"> -->
+    <!-- <meta name="generator" content="CoreThink"> -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="{:C('WEB_SITE_TITLE')}">
+    <meta name="format-detection" content="telephone=no,email=no">
+    <link rel="shortcut icon" type="image/x-icon" href="__ROOT__/favicon.ico">
+    <link rel="apple-touch-icon" type="image/x-icon" href="__ROOT__/favicon.ico">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="pragma" content="no-cache">
+    <meta http-equiv="cache-control" content="no-cache">
+    <meta http-equiv="expires" content="0">
+    <meta name="viewport" content="width=750,user-scalable=no">
+
+    <!-- <link rel="stylesheet" type="text/css" href="__PUBLIC__/css/home.min.css?v={:C('STATIC_VERSION')}"> -->
+    <link rel="stylesheet" type="text/css" href="__HOME_CSS__/main.css?v=11081910"> <!-- 引入当前主题无需经过gulp并压缩的css -->
+    <block name="style"></block>
+
+    <!-- 如果配置里CDN静态资源列表则使用CDN否则使用静态资源 -->
+    <?php if(C('CDN_RESOURCE_LIST')): ?>
+        {:C('CDN_RESOURCE_LIST')}
+    <?php else: ?>
+        <script type="text/javascript" src="__PUBLIC__/libs/jquery/2.x/jquery-2.1.4.min.js"></script>
+        <!-- // <script type="text/javascript" src='https://cdn.bootcss.com/jquery/2.1.4/jquery.min.js'></script> -->
+        <script src="__HOME_JS__/common.js?v=11121532"></script>
+    <?php endif; ?>
+    <block name="libs"></block>
+    <!-- 站点统计代码 -->
+    <!-- {:C('WEB_SITE_STATISTICS')}  -->
+</head>
+
+<body id="<?php echo 'body-'.$__CONTROLLER_NAME__.'-'.$__ACTION_NAME__; ?>" class="<?php echo 'body-'.$__CONTROLLER_NAME__.' body-'.$__CONTROLLER_NAME__.'-'.$__ACTION_NAME__; ?>">
+
+    <!-- <div class="clearfix full-container"> -->
+        <!-- <div id="main" class="container"> -->
+            <!-- 显示 main -->
+            <block name="main"></block>
+        <!-- </div> -->
+    <!-- </div> -->
+    <!-- UI alert -->
+    <div class="ui shadow">
+        <div class="ui content alert">
+            <p class="message" style="color:#727272"></p>
+            <center>
+                <input class="btn ui button button-success" type="button" value="确定">
+            </center>
+        </div>
+    </div>
+    <!-- UI confirm -->
+    <div class="ui shadow">
+        <div class="ui content confirm">
+            <p class="ui message">
+               <img class="confirm-icon" src="" alt=""> 
+               <span class="confirm-content"></span>
+            </p>
+            <center>
+                <input class="btn ui button button-cancle" type="button" value="取消">
+                <input class="btn ui button button-success" type="button" value="确定">
+            </center>
+        </div>
+    </div> 
+</body>
+<block name="script">
+    
+</block>
+</html>

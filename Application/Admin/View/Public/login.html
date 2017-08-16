@@ -1,0 +1,85 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>登录</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box; }
+    body {
+      background: url("__PUBLIC__/images/login_bg.png") no-repeat fixed;
+      background-size: cover; }
+    .logo {
+      position: absolute;
+      left: 83px;
+      top: 36px; 
+      width: 240px;
+    }
+    .login-wrap {
+      width: 368px;
+      height: 267px;
+      position: absolute;
+      left: 50%;
+      margin-left: -184px;
+      margin-top: 226px;
+      background: #fff;
+      border-radius: 2px; }
+      .login-wrap h1 {
+        font-size: 24px;
+        color: #222222;
+        text-align: center;
+        margin-top: 35px; }
+      .login-wrap input {
+        display: block;
+        width: 288px;
+        height: 34px;
+        margin: 0 auto;
+        border: none;
+        outline: none;
+        padding-left: 34px; }
+      .login-wrap .id {
+        background: #f8f8f8 url("__PUBLIC__/images/icon_user.png") 12px center no-repeat;
+        margin-top: 25px; }
+      .login-wrap .password {
+        background: #f8f8f8 url("__PUBLIC__/images/password.png") 12px center no-repeat;
+        margin-top: 16px; }
+      .login-wrap button {
+        width: 82px;
+        height: 34px;
+        line-height: 34px;
+        background-color: #2991ea;
+        color: #fff;
+        font-size: 14px;
+        text-align: center;
+        margin-left: 246px;
+        margin-top: 20px;
+        border: none;
+        border-radius: 2px;
+        cursor: pointer; }
+        .login-wrap button:hover {
+          background-color: #1477cc; }
+    .footer {
+      position: absolute;
+      width: 100%;
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.8);
+      margin-top: 522px;
+      text-align: center; }
+  </style>
+</head>
+<body>
+<form class="login-form" action="{:U('Public/login')}" method="post">
+  <img src="__PUBLIC__/images/logo.svg" alt="logo" class="logo">
+  <div class="login-wrap">
+    <h1>登录</h1>
+    <input type="text" class="id" placeholder="账号" name="username">
+    <input type="text" style="visibility:hidden;position:absolute;">
+    <input type="password" class="password" placeholder="密码" name="password" autocomplete="off">
+    <button type="submit">立即登录</button>
+  </div>
+  <div class="footer">© 2016 北京梅赛德斯-奔驰销售服务有限公司 版权所有</div>
+</form>
+</body>
+</html>

@@ -1,0 +1,349 @@
+<extend name="_Layout/main"/>
+<block name="style">
+  <style type="text/css">
+    select {
+      /*padding: 5px 10px;*/
+      /*margin-right: 5px;*/
+    }
+    .fomr-inline {
+      width: 100%;
+    }
+    .form-group {
+      width: 100%;
+      display: block;
+      padding: 10px 0;
+      border-bottom: 1px solid #ccc;
+    }
+    .display {
+      margin-top: 20px;
+    }
+
+    .table th,.table td {
+      text-align: center;
+    }
+    .freeze-modal, .restore-modal {
+      display: none;
+      margin-top: -130px;
+    }
+    .freeze-modal .modal-body div, .restore-modal .modal-body div{
+      padding: 45px 0;
+      text-align: center;
+      font-size: 14px;
+    }
+    .disabled {
+      background-color: #c5c5c5
+    }
+  </style>
+  <link rel="stylesheet" href="__PUBLIC__/js/jquery-ui-timepicker-addon.min.css">
+  <link rel="stylesheet" href="__PUBLIC__/css/order.css?v=__PUBLIC_VERSION__">
+
+  <link href="__PUBLIC__/css/jquery-ui.css" rel="stylesheet">
+</block>
+
+<block name="main">
+  <!-- <div class="container"> -->
+    <div class="top">
+    <form action="<?php echo U('index'); ?>" class="form-inline" method="post">
+      <div class="setting">
+        <div class="filter clearfix" style="float: left;">
+          <if condition="$disabled neq 'disabled'">
+          <div class="type">
+            选择经销商：
+            <select name="ld_code" "<?php echo $disabled; ?>">
+              <option value="">全部</option>
+              <foreach name="dealer_list" item="dealer" >
+              <option value="{$dealer.ld_code}" <?php if($ld_code == $dealer['ld_code']) echo 'selected'; ?> >{$dealer.ld_code} {$dealer.dealer_short}</option>
+              </foreach>
+            </select>
+          </div>
+          </if>
+          <div class="type">
+            选择角色：
+            <select name="user_type">
+              <option value="">全部角色</option>
+              <option value="6" <?php if($user_type == 6) echo 'selected'; ?>>SA</option>
+              <option value="7" <?php if($user_type == 7) echo 'selected'; ?>>SAM</option>
+              <option value="8" <?php if($user_type == 8) echo 'selected'; ?>>ASM</option>
+              <option value="9" <?php if($user_type == 9) echo 'selected'; ?>>SR</option>
+              <option value="10" <?php if($user_type == 10) echo 'selected'; ?>>调度</option>
+              <option value="11" <?php if($user_type == 11) echo 'selected'; ?>>经销商管理员</option>
+              <option value="12" <?php if($user_type == 12) echo 'selected'; ?>>终检员</option>
+              <option value="13" <?php if($user_type == 13) echo 'selected'; ?>>CDO</option>
+              <option value="14" <?php if($user_type == 14) echo 'selected'; ?>>DM</option>
+              <option value="15" <?php if($user_type == 15) echo 'selected'; ?>>留修专员</option>
+              <option value="16" <?php if($user_type == 16) echo 'selected'; ?>>洗车员</option>
+            </select>
+          </div>
+          <div class="type">
+            <input type="search" placeholder="请输入关键词" value="{$keyword}" name="keyword">
+          </div>
+          <div class="type">
+            <span class="search">搜索</span>
+          </div>
+        </div>
+        <div class="fr" style="float: right;">
+          <a href="<?php echo U('add'); ?>" class="add-user"> + 新增用户</a>
+        </div>
+      </div>
+      <input type="hidden" name="p">
+    </form>
+    </div>
+
+    <div class="display table-wrap">
+      <table class="table table-bordered table-striped">
+        <tr>
+          <th>序号</th>
+          <th>用户名</th>
+          <th>姓名</th>
+          <th>手机号</th>
+          <th>角色</th>
+          <th>操作员编号</th>
+          <th>经销商</th>
+          <th>绑定微信昵称</th>
+          <th>访问权限</th>
+          <th style="width:280px;">操作</th>
+        </tr>
+        <foreach name="userlist" item="item">
+        <tr data-id="{$item.id}">
+          <td>{$item.serial}</td>
+          <td>{$item.username}</td>
+          <td>{$item.nickname}</td>
+          <td>{$item.mobile}</td>
+          <td>{$item.role_name}</td>
+          <td>{$item.sa_code}</td>
+          <td>{$item.ld_code}</td>
+          <td>{$item.weixin_name}</td>
+          <td>{$item.auth}</td>
+          <td class="operation">
+            <span class="edit">
+              <a href="{:U('modify?id='.$item['id'])}" style="color:white;">编辑</a>
+            </span>
+            <if condition="$item.status eq 1">
+            <span class="freeze" data-url="<?php echo U('freeze',array('id'=>$item['id'])); ?>">
+              账号冻结
+            </span>
+            <span class="edit restore" style="display:none;" data-url="<?php echo U('revert',array('id'=>$item['id'])); ?>">
+              恢复账号
+            </span>
+            <else />
+            <span class="freeze" style="display:none;" data-url="<?php echo U('freeze',array('id'=>$item['id'])); ?>">
+              账号冻结
+            </span>
+            <span class="edit restore" data-url="<?php echo U('revert',array('id'=>$item['id'])); ?>">
+              恢复账号
+            </span>
+            </if>
+            <if condition="$item.openid neq ''">
+            <span class="unbundling" data-id="{$item.id}" data-url="<?php echo U('unbind',array('id'=>$item['id'])); ?>">
+              解绑微信
+            </span>
+            <else />
+            <span class="disabled">
+              解绑微信
+            </span>
+            </if>
+          </td>
+        </tr>
+        </foreach>
+      </table>
+      <div class="table-tips">显示{$first}-{$last}条，共{$count}条</div>
+      <div class="pagination">
+        <span class="prev">前一页</span>
+        <foreach name="page" item="item">
+          <a href="#" class="{$item.class}">{$item.name}</a>
+        </foreach>
+        <span class="next">后一页</span>
+      </div>
+      <!-- <nav class="col-sm-12">
+        <div class="pagination">{$page}</div>
+      </nav> -->
+    </div>
+  <!-- </div> -->
+
+  <div class="freeze-modal modal-wrap">
+    <div class="modal-head">
+      冻结账号
+      <img src="__PUBLIC__/images/close.png" alt="" class="close">
+    </div>
+    <div class="modal-body">
+      <div>
+        确认冻结该账号？
+      </div>
+    </div>
+    <div class="modal-footer">
+      <span class="save">确认</span>
+      <span class="close cancel">取消</span>
+    </div>
+  </div>
+
+  <div class="restore-modal modal-wrap">
+    <div class="modal-head">
+      恢复账号
+      <img src="__PUBLIC__/images/close.png" alt="" class="close">
+    </div>
+    <div class="modal-body">
+      <div>
+        确认恢复该账号？
+      </div>
+    </div>
+    <div class="modal-footer">
+      <span class="save">确认</span>
+      <span class="close cancel">取消</span>
+    </div>
+  </div>
+</block>
+
+<block name="script">
+
+  <script src="__PUBLIC__/js/jquery-ui.js"></script>
+  <script src="__PUBLIC__/js/jquery-ui-timepicker-addon.js"></script>
+  <script type="text/javascript">
+    $(function(){
+
+      $('.modal-bg').height($(document).height());
+      
+      $('select[name="user_type"').on('change',function(){
+        $('form').submit();
+      })
+
+      $('select[name="ld_code"').on('change',function(){
+        $('form').submit();
+      })
+
+      $('.search').click(function() {
+        $('form').submit();
+      })
+
+      // 解绑微信操作
+      $('.unbundling').click(function() {
+        $('.weixin-modal').show()
+        $('.modal-bg').show()
+        var url = $(this).data('url')
+        $('.weixin-modal .save').data('url', url)
+      });
+
+      // 微信解绑确认事件
+      $('.weixin-modal .save').click(function() {
+        var url = $(this).data('url')
+        $.ajax({
+          'url': url
+        }).done(function(res) {
+          var id = res['info']
+          unbindWeixinUI(id)
+        })
+        $('.modal-wrap').hide();
+        $('.modal-bg').hide();
+        // $('.save-success-modal').show();        
+      });
+
+      // 取消绑定微信后界面修改
+      function unbindWeixinUI(id) {
+        $("tr").each(function() {
+          if($(this).data('id') == id) {
+            $(this).find('.bind').removeClass('bind')
+            $(this).find('.unbundling').removeClass('unbundling').addClass('disabled');
+          }
+        })
+      }
+
+      // 账号冻结
+      $('.freeze').click(function() {
+        $('.freeze-modal').show()
+        $('.modal-bg').show()
+        var url = $(this).data('url')
+        $('.freeze-modal .save').data('url', url)
+      });
+      $('.freeze-modal .save').click(function() {
+        var url = $(this).data('url')
+        $.ajax({
+          'url': url
+        }).done(function(res) {
+          var id = res['info']
+          $("tr").each(function() {
+            if($(this).data('id') == id) {
+              $(this).find('.freeze').hide();
+              $(this).find('.restore').show();
+            }
+          })
+        })
+        $('.modal-wrap').hide();
+        $('.modal-bg').hide();
+      });
+
+      // 账号恢复
+      $('.restore').click(function() {
+        $('.restore-modal').show()
+        $('.modal-bg').show()
+        var url = $(this).data('url')
+        $('.restore-modal .save').data('url', url)
+      });
+      $('.restore-modal .save').click(function() {
+        var url = $(this).data('url')
+        $.ajax({
+          'url': url
+        }).done(function(res) {
+          var id = res['info']
+          $("tr").each(function() {
+            if($(this).data('id') == id) {
+              $(this).find('.restore').hide();
+              $(this).find('.freeze').show();
+            }
+          })
+        })
+        $('.modal-wrap').hide();
+        $('.modal-bg').hide();
+      });
+
+
+      // 取消
+      $('.cancel,.close').click(function() {
+        $('.modal-wrap').hide();
+        $('.modal-bg').hide();
+      });
+
+      // 分页
+      var current = parseInt("<?php echo $pagenum; ?>", 10);
+      $(".pagination a").each(function() {
+        $(this).attr('href','javascript:void(0)');
+      });
+      $(".pagination .prev").click(function() {
+        $('input[name="p"]').val(current-1);
+        $('form').submit();
+      });
+      $(".pagination .num").each(function() {
+        $(this).click(function() {
+          var page = $(this).html();
+          if(page == current) {
+            return;
+          }else {
+            $('input[name="p"]').val(page);
+            $('form').submit();
+          }
+        });
+      });
+      $(".pagination .next").click(function() {
+        $('input[name="p"]').val(current+1);
+        $('form').submit();
+      });
+      $(".pagination .first").click(function() {
+        var page = $(this).html();
+        $('input[name="p"]').val(page);
+        $('form').submit();
+      });
+      $(".pagination .end").click(function() {
+        var page = $(this).html();
+        $('input[name="p"]').val(page);
+        $('form').submit();
+      });
+
+      $(".btn-search").click(function() {
+        $('form').submit();
+      });
+
+      $(".btn-submit").click(function() {
+        $('form').submit();
+      });
+
+    });
+  </script>
+</block>

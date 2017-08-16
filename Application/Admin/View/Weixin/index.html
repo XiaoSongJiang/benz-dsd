@@ -1,0 +1,67 @@
+<extend name="_Layout/main"/>
+<block name="style">
+  <style type="text/css">
+    th,td {
+      text-align: center;
+    }
+    a {
+      text-decoration: none;
+    }
+  </style>
+</block>
+
+<block name="main">
+  <div class="container">
+    <h2>获取Access Token</h2>
+    <p style="width:960px;">{$token}</p>
+    <div>
+      {$media}
+    </div>
+    <h2>图文消息素材列表  <a href="http://mp.weixin.qq.com/debug/" target="_blank">配置菜单</a></h2>
+    <table class="table table-bordered" style="width:960px;">
+      <tr>
+        <th>素材media_id</th>
+        <th>图文消息标题</th>
+        <th>素材访问链接</th>
+      </tr>
+      
+      <foreach name="materials" item="item">
+        <?php 
+          $news_item = $item['content']['news_item'];
+          $count = count($news_item);
+          $padding = 15*$count.'px';
+        ?>
+        
+        <if condition="$count gt 1">
+          <tr>
+          <td rowspan="{$count}" style="padding:{$padding} 0;">{$item.media_id}</td>
+          <?php $news = $news_item[0]; ?>
+          <td>{$news.title}</td>
+          <td><a href="{$news.url}" target="_blank">查看详情</a></td>
+          </tr>
+          <foreach name="news_item" item="news">
+            <if condition="$key gt 0">
+              <tr>
+              <td>{$news.title}</td>
+              <td><a href="{$news.url}" target="_blank">查看详情</a></td>
+              </tr>
+            </if>
+          </foreach>
+        <else/>
+          <tr>
+          <td>{$item.media_id}</td>
+          <foreach name="news_item" item="news">
+          <td>{$news.title}</td>
+          <td><a href="{$news.url}" target="_blank">查看详情</a></td>
+          </foreach>
+          </tr>
+        </if>
+        
+      </foreach>
+    </table>
+  </div>
+</block>
+
+<block name="script">
+
+</block>

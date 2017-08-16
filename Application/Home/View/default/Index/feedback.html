@@ -1,0 +1,121 @@
+<extend name="_Layout/main"/>
+
+<block name="title"><title>{$meta_title}</title></block>
+
+
+<block name="style">
+    <style type="text/css">
+
+        .feedback-top {
+          width: 100%;
+          height: 255px;
+          padding: 0;
+          margin: 0;
+          background: #ededed;
+          padding-left: 10px;
+        }
+        .triangle-down {
+          width: 0;
+          height: 0;
+          border-left: 20px solid transparent;
+          border-right: 20px solid transparent;
+          border-top: 20px solid #ededed;
+          margin: 0 auto;
+        }
+        img {
+          width: 100%;
+        }
+        textarea {
+          background-color: #e3e4e4;
+          box-sizing: border-box;
+          padding: 5px 10px;
+          width: 80%;
+          height: 140px;
+        }
+
+        .message-text {
+          position: absolute;
+          top: 100px;
+          padding: 10px 50px;
+        }
+        .message-text img {
+          width: 30px;
+          padding-top: 15px;
+        }
+        .btn-confirm {
+          margin-bottom: 30px;
+        }
+
+        @media (max-width: 320px) {
+          .feedback-top {
+            height: 230px;
+          }
+          textarea {
+            width: 260px;
+            height: 110px;
+            border: none;
+          }
+          .message-text {
+            top: 80px;
+            padding: 10px 30px;
+          }
+          .btn-confirm {
+            width: 66%;
+            height: 40px;
+            margin-left: 17%;
+            margin-top: 15px;
+            margin-bottom: 30px;
+            font-size: 18px;
+          }
+        }
+    </style>
+</block>
+
+<block name="main">
+
+    <div class="feedback-top">
+        <img src="__HOME_IMG__/icon/logo.png" alt="">
+        <img src="__HOME_IMG__/icon/timeout-clock.png" alt="" style="width:40%;margin-left:-10px;">
+    </div>
+    <div class="triangle-down">
+      
+    </div>
+    <div class="message-text">
+        <p><img src="__HOME_IMG__/icon/msg-timeout.png" alt="" style="width:80%;"></p>
+        <!-- <p><img src="__HOME_IMG__/icon/happy.png" alt="" ></p> -->
+    </div>
+    <p style="padding:15px"><img src="__HOME_IMG__/icon/advice.png" alt="" style="width:70%;margin-top:20px;"></p>
+    <form id="form" action="<?php echo U('suggest'); ?>" method="post">
+    <input type="hidden" name="log_id" value="{$log.log_id}">
+    <center>
+        <textarea name="remark" id="remark" cols="20" rows="10"></textarea>
+    </center>
+    <if condition="$activity eq 1">
+      <input class="btn btn-ok btn-confirm" type="button" value="提交服务建议，参与抽奖" style="width:220px;">
+    </form>
+    <else/>
+      <input class="btn btn-ok btn-confirm" type="button" value="提交服务建议" style="width:220px;">
+    </form>
+    </if>
+</block>
+
+<block name="script">
+    <script type="text/javascript">
+        $(function(){
+
+            $(".btn-confirm").click(function() {
+                var content = $("#remark").val();
+                if(content.length > 400) {
+                  benz.ui.alert('服务建议不能超过400字！');
+                }else {
+                  var lottery = "<?php echo $activity; ?>";
+                  if(lottery) {
+                    benz.ui.alert('提交成功，感谢您的反馈！','submit','#form','立即抽奖');
+                  }else {
+                    benz.ui.alert('提交成功，感谢您的反馈！','submit','#form');
+                  }   
+                }
+            });
+        });
+    </script>
+</block>

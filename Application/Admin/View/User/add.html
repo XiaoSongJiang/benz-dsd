@@ -1,0 +1,246 @@
+<extend name="_Layout/main"/>
+<block name="style">
+  <style type="text/css">
+    select {
+      /*padding: 5px 10px;*/
+      /*margin-right: 5px;*/
+    }
+    .form-group {
+      width: 100%;
+      display: block;
+      padding-bottom: 5px 0;
+    }
+    .display {
+      margin-top: 20px;
+    }
+
+    .table th,.table td {
+      text-align: center;
+    }
+  </style>
+  <link rel="stylesheet" href="__PUBLIC__/css/order.css">
+</block>
+<block name="main">
+
+    <form action="<?php echo U('add'); ?>" method="post" enctype="multipart/form-data">
+      <h3>用户列表 <span>></span> 用户详情</h3>
+      <div class="setting">
+        <div class="upload-avatar">
+          <img src="__PUBLIC__/images/avatar.png" alt="" class="avatar">
+          <a href="javascript:;" class="file">
+            上传照片
+            <input type="file" id="avatar" name="avatar">
+          </a>
+        </div>
+        <div class="user-details">
+          <div>
+            <span class="require">账号:</span>
+            <input type="text" placeholder="请设置成与D8账号一致" name="username" class="username">
+            <!-- <i class="alert-msg username-error" style="color:#a94442;display:none;">用户名已存在</i> -->
+          </div>
+          <div class="password">
+            <span class="require">密码:</span>
+            <input type="password" name="password">
+          </div>
+          <div>
+            <span class="require">姓名:</span>
+            <input type="text" name="nickname">
+          </div>
+          <div>
+            <span class="require">角色:</span>
+            <select name="user_type" id="role">
+              <option value="">选择角色</option>
+              <option value="6">SA</option>
+              <option value="7">SAM</option>
+              <option value="8">ASM</option>
+              <option value="9">SR</option>
+              <option value="10">调度</option>
+              <option value="11">经销商管理员</option>
+              <option value="12">终检员</option>
+              <option value="13">CDO</option>
+              <if condition="$admin eq 'admin'">
+              <option value="14">DM</option>
+              </if>
+              <option value="15">留修专员</option>
+              <option value="16">洗车员</option>
+            </select>
+          </div>
+          <if condition="$admin eq 'admin'">
+          <div class="region-area" style="display:none;">
+            <span id="region_code">选择区域:</span>
+            <select name="region_code" id="region">
+              <option value="">请选择区域</option>
+              <option value="EAST">东区</option>
+              <option value="WEST">西区</option>
+              <option value="SOUTH">南区</option>
+              <option value="NORTH">北区</option>
+              <option value="">所有区域</option>
+            </select>
+          </div>
+          </if>
+          <if condition="$admin eq 'admin'">
+          <div>
+            <span id="ldcode" class="require">经销商代码:</span>
+            <input type="text" placeholder="经销商两位代码" name="ld_code">
+          </div>
+          </if>
+          <div>
+            <span id="sacode">操作员编号:</span>
+            <input type="text" placeholder="SA必填、请与操作员编码一致" name="sa_code">
+          </div>
+          <div>
+            <span>邮箱:</span>
+            <input type="text" name="email">
+          </div>
+          <div>
+            <span class="require" data-type="mobile">手机号:</span>
+            <input type="text" name="mobile">
+          </div>
+          <div>
+            <span class="require">权限访问:</span>
+            <input type="checkbox" name="auth[]" value="DOS">DOS
+            <input type="checkbox" name="auth[]" value="OAB">OAB
+          </div>
+          <br>
+          <div style="height:60px;">
+            <span>
+              <input type="checkbox" class="disclaimer" checked="true">
+            </span>
+            <span style="width:240px;margin-left:0;margin-top:20px;">同意使用个人照片、姓名及手机号码到客户端微信，方便客户联系</span>
+          </div>
+          <div>
+            <a href="javascript:;" class="save ajax-post">保存</a>
+            <a href="{:U('index')}" class="back">返回</a>
+          </div>
+        </div>
+      </div>
+  </form>
+
+</block>
+
+<block name="script">
+  <script type="text/javascript">
+    $(function(){
+      $(".save").click(function() {
+        $('form').submit();
+
+      })
+
+      $("#avatar").change(function() {
+        var objUrl = getObjectURL(this.files[0]);
+        if (objUrl) {
+          $(".avatar").attr('src', objUrl);
+        }
+      })
+
+      function getObjectURL(file) {
+        var url = null ;
+        if (window.createObjectURL!=undefined) { // basic
+            url = window.createObjectURL(file) ;
+        } else if (window.URL!=undefined) { // mozilla(firefox)
+            url = window.URL.createObjectURL(file) ;
+        } else if (window.webkitURL!=undefined) { // webkit or chrome
+            url = window.webkitURL.createObjectURL(file) ;
+        }
+        return url ;
+      }
+
+      // 如果角色是SA, 经销商代码是必填的
+      $("#role").change(function() {
+        var role = $(this).val()
+        if(role == 6) {
+          $("#sacode").addClass('require');
+        }else {
+          $("#sacode").removeClass('require');
+        }
+
+        if(role == 14) {
+          $(".region-area").show();
+          // $("#region_code").addClass('require');
+          $("#ldcode").removeClass('require');
+        }else {
+          $(".region-area").hide();
+          $("#region_code").removeClass('require');
+          $("#ldcode").addClass('require');
+        }
+      })
+
+      // form提交判断必填值
+      $('form').submit(function() {
+
+        if(userExists) {
+          alert('用户名已存在')
+          return false
+        }
+
+        var res = require()
+        if(res == true) {
+          console.log('可以提交')
+        }else {
+          alert(res)
+          return false
+        }
+
+        var checked = $("input[name='auth[]']").is(':checked');
+        if(!checked) {
+          alert('请选择可访问权限');
+          return false;
+        }
+
+        var agree = $('.disclaimer').is(':checked')
+        if(!agree) {
+          alert('请勾选同意使用个人信息')
+          return false
+        }
+      }) 
+
+      var userExists = false
+
+      function require() {
+
+        var have = true
+        var regMobile = /^1[0-9]{10}$/
+        var message = '请填写必填字段*'
+        $('.require').each(function(index) {
+          var required = $(this).next().val()
+          var type = $(this).data('type');
+            console.log(type)
+
+          if(type == 'mobile') {
+            if(required) {
+              if(!required.match(regMobile)) {
+                have = false
+                message = "手机号格式错误";
+              }
+            }
+          }
+          have &= !!required
+        })
+        return have || message;
+      }
+
+      $('.username').blur(function() {
+        exists($(this).val())
+      })
+
+      function exists(username) {
+        console.log(username)
+        $.ajax({
+          url: "<?php echo U('exists'); ?>",
+          data: {
+            'username': username
+          },
+        })
+        .done(function(data) {
+          if(data.info == 'exists') {
+            userExists = true
+            // $('.username-error').show()
+          }else {
+            userExists = false
+            // $('.username-error').hide()
+          }
+        });
+      }
+    });
+  </script>
+</block>

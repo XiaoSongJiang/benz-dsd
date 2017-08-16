@@ -1,0 +1,398 @@
+<extend name="_Layout/main"/>
+
+<block name="title"><title>{$meta_title}</title></block>
+
+<block name="style">
+  <style type="text/css">
+    .main {
+      margin-top: 6%;
+      width: 100%;
+    }
+    /*沙漏*/
+    .sandglass {
+      width: 40%;
+      margin-left: 30%;
+    }
+    .sandglass img {
+      width: 100%;
+      /*height: 100%;*/
+    }
+    /*提示信息*/
+    .tips {
+      position: relative;
+      width: 200px;
+      margin: 0 auto;
+      margin-top: -15px;
+      color: #05833a;
+    }
+    .tips p {
+      font-size: 24px;
+      font-weight: 700;
+    }
+    .btn-tips {
+      width: 35px;
+      position: absolute;
+      right: 0;
+      top: -25px;
+    }
+    /*时钟*/
+    .clock {
+      width: 300px;
+      margin: 15px auto;
+      padding-left: 25px;
+    }
+    .clock .number{
+      display: inline-block;
+      width: 42px;
+      height: 60px;
+      line-height: 60px;
+      font-size: 2em;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      text-align: center;
+      vertical-align: middle;
+      background: url(__HOME_IMG__/icon/bg-number.png);
+      background-size: cover;
+      font-weight: 700;
+      color: #008136;
+    }
+    .clock .number-title {
+      font-size: 1.5em;
+      color: #8b8a8a;
+    }
+
+    .groups {
+      position: absolute;
+      width: 100%;
+      bottom: 0;
+      border-top: 2px solid #ccc;
+    }
+    .groups .item{
+      display: inline-block;
+      width: 33%;
+      height: 72px;
+      padding: 5px 0 12px 0;
+      vertical-align: middle;
+      box-sizing: border-box;
+      /*background-color: #ccc;*/
+    }
+    .item div {
+      width: 100%;
+      height: 55px;
+    }
+    @media (max-width: 320px) {
+      .groups .item {
+        height: 55px;
+        padding: 5px 0 12px 0;
+      }
+      .item div {
+        height: 38px;
+      }
+      .clock {
+        width: 260px;
+        margin: 15px auto;
+        padding-left: 25px;
+      }
+      .clock .number{
+        display: inline-block;
+        width: 37px;
+        height: 52px;
+        line-height: 52px;
+        font-size: 1.75em;
+      }
+    }
+
+
+    .item {
+      border-right: 2px solid #ccc;
+    }
+    .item:last-child {
+      border: none;
+    }
+    .item img {
+      display: block;
+      width: 55px;
+      height: 55px;
+      margin: 0 auto;
+    }
+
+    .btn-add div {
+      background: url('__HOME_IMG__/icon/btn-add.png') no-repeat center;
+      background-size: contain;
+    }
+    .btn-complete div {
+      background: url('__HOME_IMG__/icon/btn-complete.png') no-repeat center;
+      background-size: contain;
+    }
+    .btn-overtime div {
+      background: url('__HOME_IMG__/icon/btn-overtime.png') no-repeat center;
+      background-size: contain;
+    }
+    .btn-overtime.disabled div{
+      background: url('__HOME_IMG__/icon/gray-overtime.png') no-repeat center;
+      background-size: contain;
+    }
+
+    /*tips window*/
+    .tips-window {
+      width: 90%;
+      margin-top: 50%;
+      margin-left: 5%;
+      box-sizing: border-box;
+      background-color: #f4f4f4;
+      box-shadow: inset 0 1px 1px rgba(0,0,0.0.5);
+    }
+    .tips-close {
+      float: right;
+      font-size: 25px;
+      height: 30px;
+      line-height: 30px;
+      margin-right: 10px;
+      color: #fff;
+    }
+    .tips-title {
+      height: 30px;
+      background: url('__HOME_IMG__/icon/tips.png') no-repeat center;
+      background-size: cover;
+    }
+    .tips-list {
+      padding: 15px 10px 25px 20px;
+    }
+    .tips-list p {
+      text-align: left;
+      line-height: 22px;
+      color: #6d6d6d;
+    }
+    
+  </style>
+</block>
+
+<block name="main">
+  <div class="top">
+    <img src="__HOME_IMG__/icon/logo.png" alt="">
+    
+  </div>
+  <div class="main">
+    <!-- <div class="sandglass">
+      <img id="sand" src="" alt="">
+    </div> -->
+    <img id="sand" src="" alt="" style="width:40%;height:auto;margin-left:30%;">
+    <p><img src="__HOME_IMG__/icon/sand-shadow.png" alt="" style="width:55%;margin-top:-10px;"></p>
+    <div class="tips">
+      <img src="__HOME_IMG__/icon/i.png" alt="" class="btn-tips">
+      <p>基础{$log.service_type}保养</p>
+    </div>
+    <center class="clock">
+      <div class="number minute-10">0</div>
+      <div class="number minute-1">0</div>
+      <span class="number-title">分</span>
+      <div class="number second-10">0</div>
+      <div class="number second-1">0</div>
+      <span class="number-title">秒</span>
+    </center>
+  </div>
+  <div class="groups">
+    <div class="item btn btn-add">
+    <div>&nbsp;</div>
+    </div><div class="item btn btn-complete">
+    <div>&nbsp;</div>
+    </div><div class="item btn btn-overtime disabled">
+    <div>&nbsp;</div>
+    </div>
+  </div>
+  <div class="ui shadow">
+    <div class="tips-window">
+      <div class="tips-title">
+        <span class="tips-close">&times;</span>
+      </div>
+      <div class="tips-content">
+        <div class="tips-list">
+          <p>经销商：{$log.ld_code|getDealerInfo='dealer_short'}</p>
+          <p>服务单号：{$log.wip}</p>
+          <p>服务类型：基础{$log.service_type}保养</p>
+          <p>开始时间：{$log.start_timestamp|date='Y-m-d H:i:s',###}</p>
+          <p>服务项目：{$type_detail}</p>
+          <p style="color:#4da57f;">注：检查项目因车型不同有所调整</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <img src="__HOME_IMG__/gif/animate-01.gif" alt="" style="display:none;">
+</block>
+
+<block name="script">
+  <script type="text/javascript">
+    $(function(){
+
+      var width = $(window).width();
+      var height = $(window).height();
+      
+      var ct = {};
+
+      // init clock
+      function initclock() {
+        ct.minute = Math.floor(ct.total_time / 60);
+        ct.second = ct.total_time % 60;
+        $(".minute-10").html(Math.floor(ct.minute / 10));
+        $(".minute-1").html(ct.minute % 10);
+        $(".second-10").html(Math.floor(ct.second / 10));
+        $(".second-1").html(ct.second % 10);
+      }
+
+      // update clock
+      function updateclock() {
+        if(ct.second == 0) {
+          ct.second = 59;
+          ct.minute -= 1;
+          $(".minute-10").html(Math.floor(ct.minute/10));
+          $(".minute-1").html(ct.minute % 10);
+          $(".second-10").html(5);
+          $(".second-1").html(9);
+        }else{
+          ct.second -= 1;
+          $(".second-10").html(Math.floor(ct.second/10));
+          $(".second-1").html(ct.second % 10);
+        }
+      }
+
+      var count = 0;
+
+      // countdown start
+      function countdown() {
+
+        // clock
+        if(ct.past < ct.total) {
+          updateclock();
+        }
+        // sandglass
+        count += 1;
+        ct.past += 1;
+
+        if(ct.past >= 5 && ct.level != 7) {
+          var cur_level = Math.floor(ct.past/ct.total*6 + 1);
+          if(ct.total - ct.past <= 5 && ct.level != 7) {
+            ct.level = 7;
+            $('#sand').attr('src','__HOME_IMG__/gif/animate-last-01.gif');
+          }else if(cur_level != ct.level) {
+            ct.level = cur_level;
+            var src = "__HOME_IMG__/gif/animate-0" + ct.level.toString() + ".gif";
+            $('#sand').attr('src',src);
+          }
+        }
+
+        // judge finish
+        if(ct.past >= ct.total) {
+          $('#sand').attr('src','__HOME_IMG__/icon/sandempty.png');
+          $('.btn-overtime').removeClass('disabled');
+          $('.ui.alert').find('.ui.button-success').val('我知道了');
+          benz.ui.alert('倒计时结束，请确认服务状态');
+        }else {
+          var offset = new Date().getTime() - (ct.now + count) * 1000;
+          if(offset > 800) {
+            resetTime();
+          }
+          var nextTime = 1000 - offset;
+          if(nextTime < 0) {
+            nextTime = 0;
+          }
+          setTimeout(countdown,nextTime);
+        }  
+      }
+      // countdown end
+
+      // return from back to reset the time
+      function resetTime() {
+        ct.now = parseInt(new Date().getTime() / 1000, 10);
+        ct.total_time = ct.end_time - ct.now > 0 ? ct.end_time - ct.now : 0;
+        ct.total = ct.end_time - ct.start_time;
+        ct.past = ct.now - ct.start_time;
+        count = 0;
+        initclock();
+      }
+
+      // start
+      function init() {
+        // init time
+        ct.now = parseInt("{$time_now}", 10);
+        ct.start_time = "{$log.start_timestamp}";
+        ct.end_time = "{$log.end_timestamp}";
+        
+        var first = "{$first}";
+        if(first == 'first') {
+          var type = '{$log.service_type}';
+          ct.now = parseInt(new Date().getTime() / 1000, 10);
+          ct.start_time = ct.now;
+          ct.end_time = ct.start_time + 60*(type=='A'?60:90);
+        }
+
+        // ct.now = parseInt(new Date().getTime() / 1000, 10);
+        // ct.start_time = ct.now;
+        // ct.end_time = ct.now + 20;
+        
+        ct.total_time = ct.end_time - ct.now;
+        ct.total = ct.end_time - ct.start_time;
+        // init sandglass
+        ct.past = ct.now - ct.start_time;
+        ct.level = Math.floor(ct.past/ct.total*6 + 1);
+        
+        if(ct.past == 0) {
+          ct.level = 0;
+          ct.total_time = ct.total;
+          $('#sand').attr('src','__HOME_IMG__/gif/animate-start-01.gif');
+        }else if(ct.total_time <= 0){
+          $('#sand').attr('src','__HOME_IMG__/icon/sandempty.png');
+          $('.btn-overtime').removeClass('disabled');
+          $('.ui.alert').find('.ui.button-success').val('我知道了');
+          benz.ui.alert('倒计时结束，请确认服务状态');
+        }else{
+          $('#sand').attr('src',"__HOME_IMG__/gif/animate-0" + ct.level.toString() + ".gif");
+        }
+        // init clock
+        if(ct.total_time > 0) {
+          initclock();
+          var offset = new Date().getTime() - ct.now * 1000;
+          countdown();
+        } 
+      }
+
+      init();
+
+      // 查看提示信息
+      $(".btn-tips").click(function() {
+        var shadow = $(".tips-window").parent(".shadow");
+        $(shadow).show();
+        $(".tips-close").click(function() {
+          $(shadow).hide();
+        });
+      });
+
+      // 服务加项
+      $(".btn-add").click(function() {
+        var redirect = "<?php echo U('finish',array('action'=>'add')) ?>";
+        var icon = "__HOME_IMG__/icon/confirm-plus.png";
+        benz.ui.confirm('确认加项，计时结束?',icon,'goto',redirect);
+      });
+      // 服务完成
+      $(".btn-complete").click(function() {
+        var redirect = "<?php echo U('finish',array('action'=>'complete')) ?>";
+        var icon = "__HOME_IMG__/icon/confirm-ok.png";
+        benz.ui.confirm('确认服务完成?',icon,'goto',redirect);
+      });
+      // 服务超时
+      $(".btn-overtime").click(function() {
+        if($(this).hasClass('disabled')) {
+          return;
+        }
+        var redirect = "<?php echo U('finish',array('action'=>'timeout')) ?>";
+        var icon = "__HOME_IMG__/icon/confirm-sign.png";
+        benz.ui.confirm('确认服务超时?',icon,'goto',redirect);
+      });
+
+    });
+  </script>
+</block>
+
+
+
+
+

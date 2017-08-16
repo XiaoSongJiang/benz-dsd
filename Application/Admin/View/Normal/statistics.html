@@ -1,0 +1,163 @@
+<extend name="_Layout/main"/>
+<block name="style">
+  <style type="text/css">
+    .select-type{
+      width: 100px;
+      margin-right: 10px;
+    }
+    #search{
+      display: inline-block;
+      width: 80px;
+      height: 30px;
+      border-radius: 4px;
+      color: #fff;
+      line-height: 30px;
+      padding-left: 38px;
+      cursor: pointer;
+      background: #2991ea url(__PUBLIC__/images/search.png) 15px center no-repeat;
+      background-size: 15px;
+    }
+    .order-wrap .main-area .list-filter{
+      height:50px;
+    }
+  </style>
+  <link rel="stylesheet" href="__PUBLIC__/js/jquery-ui-timepicker-addon.min.css">
+  <link href="__PUBLIC__/css/jquery-ui.css" rel="stylesheet">
+</block>
+<block name="main">
+  <div class="list-filter">
+    <!-- <foreach name="urls" item="item">
+    <a href="{$item.url}" class="{$item.class}">{$item.name}</a>
+    </foreach> -->
+    <!-- <a href="<?php echo U('statistics', ['type' => 'today']) ?>" class="toggle current">今天</a>
+    <a href="<?php echo U('statistics', ['type' => 'month']) ?>" class="toggle">本月</a>
+    <a href="<?php echo U('statistics', ['type' => 'last']) ?>" class="toggle">上一月</a> -->
+    <form method="post" action="__SELF__">
+      <select name="time_type" class="select-type">
+        <option value="today" <eq name="time_type" value="today">selected="true"</eq>>今天</option>
+        <option value="month" <eq name="time_type" value="month">selected="true"</eq>>本月</option>
+        <option value="last" <eq name="time_type" value="last">selected="true"</eq>>上一月</option>
+      </select>
+      <select name="repair_type" class="select-type">
+        <option value="" <eq name="repair_type" value="">selected="true"</eq>>总量</option>
+        <option value="保养" <eq name="repair_type" value="保养">selected="true"</eq>>保养量</option>
+        <option value="一般维修" <eq name="repair_type" value="一般维修">selected="true"</eq>>一般维修量</option>
+        <option value="事故维修" <eq name="repair_type" value="事故维修">selected="true"</eq>>事故维修量</option>
+        <option value="保修" <eq name="repair_type" value="保修">selected="true"</eq>>保修量</option>
+        <option value="其他" <eq name="repair_type" value="其他">selected="true"</eq>>其他</option>
+      </select>
+      <input type="submit" value="搜索" id="search">
+    </form>
+  </div>
+  <div class="chart-wrap clearfix">
+    <div class="title">{$title}{$title_type}登记进厂量<span>（台/次）</span></div>
+    <!--月登记进厂量有次标题-->
+    <div class="sub-title">{$tips}</div>
+    <!--图表的高度要动态计算 高度赋值后再初始化图表数据-->
+    <div id="chart-one" style="height: 300px"></div>
+    <div class="data">
+      {$total} <br>
+      <span>{$title}{$title_type}登记进厂量</span>
+    </div>
+  </div>
+</block>
+
+<block name="script">
+  <script src="__PUBLIC__/js/echarts.min.js"></script>
+  <script type="text/javascript">
+
+    function multi(data, n) {
+      var list = []
+      for(var i = 0; i < n; i++) {
+        data.forEach(function(item) {
+          list.push(item)
+        })
+      }
+      return list
+    }
+    $(function(){
+
+      var statistics = <?php echo json_encode($statistics); ?>;
+      var yAxis = statistics['yAxis'];
+      // yAxis = multi(yAxis, 100);
+      var data  = statistics['data'];
+      // data = multi(data, 100);
+      var ids   = statistics['ids'];
+      $("#chart-one").css('height', data.length * 80 + 'px');
+
+      var myChart = echarts.init(document.getElementById('chart-one'));
+      option = {
+        color: ['#3398DB'],
+        tooltip : {
+          trigger: 'axis',
+          formatter: '{b0}<br />{a0}: {c0} (台/次)'
+        },
+        legend: {
+          show: false
+        },
+        xAxis : [
+          {
+            type : 'value',
+            boundaryGap : [0, 0.02],
+            splitLine: {
+              show: false
+            },
+            show: false
+          }
+        ],
+        yAxis : [
+          {
+            type : 'category',
+            data : yAxis,
+            axisLabel : {
+              margin: 26,
+              interval: 0,
+            },
+            splitLine: {
+              show: false
+            },
+            axisLine: {
+              show: false
+            },
+            axisTick: {
+              show: false
+            },
+            triggerEvent: true
+          }
+        ],
+        series : [
+          {
+            name: '当日登记进厂量',
+            type: 'bar',
+            data: data,
+            label: {
+              normal: {
+                  show: true,
+                  position: 'left',
+              }
+            }
+          }
+        ]
+      };
+      myChart.setOption(option);
+      myChart.on('click', function(param) {
+        // 根据坐标值计算索引位置
+        var index = Math.floor((param.event.offsetY - 21) / 67) - 1
+        index = ids.length - 1 - index;
+        
+        var id = ids[index]
+        if(id == 'other') {
+          // return false
+        }
+        var data = "{$time_type}"
+        var time_type = "<?php echo $time_type; ?>";
+        var repair_type = "<?php echo $repair_type; ?>";
+
+        var url   = "<?php echo U('admin/normal/sawiplist/sa_uid'); ?>".replace('.html', '/') + id
+        url = url + "/dateFilter/" + time_type + "/dateFilterType/check_in/repair/" + repair_type
+
+        window.open(url)
+      })
+    });
+  </script>
+</block>

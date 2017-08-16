@@ -1,0 +1,43 @@
+<extend name="_Layout/main"/>
+
+<block name="main">
+	<style type="text/css">
+		.main {
+			margin-bottom: 80px;
+		}
+		.block {
+			background-color: #fff;
+			margin-top: 20px;
+		}
+		h4 {
+			margin-top: 3px;
+		}
+		th {
+			width: 20%;
+			text-align: center;
+		}
+		td {
+			width: 70%;
+			text-align: center;
+			/*padding-left: 20px;*/
+		}
+	</style>
+
+	<div class="col-md-10 block">
+		<fieldset>
+			<legend><h3>订单信息</h3></legend>
+			
+		</fieldset>
+	</div>
+	<script type="text/javascript" src="__PUBLIC__/js/jquery.qrcode.min.js"></script>
+	<script type="text/javascript">
+
+		// var id = "<?php echo $log['log_id'] ?>";
+		// var wip = "<?php echo $log['wip'] ?>";
+		// var sa = "<?php echo $log['sa_uid'] ?>";
+		// var url = `http://benz.hexdo.com/home/index/qrcode/back/qrcode/id/${id}/wip/${wip}/sa/${sa}`;
+
+		// $('#code').qrcode(url);
+
+	</script>
+</block>

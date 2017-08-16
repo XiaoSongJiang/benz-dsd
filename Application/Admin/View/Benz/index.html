@@ -1,0 +1,56 @@
+<extend name="_Layout/main"/>
+
+<block name="style">
+  <style type="text/css">
+    .btn {
+      padding: 6px 12px;
+      border-radius: 3px;
+      margin-right: 15px;
+      cursor: pointer;
+      display: inline-block;
+    }
+    .container {
+      min-height: 350px;
+    }
+    .btn-success {
+      color: #fff;
+      background-color: #5cb85c;
+      border-color: #4cae4c
+    }
+    .btn-info {
+      color: #fff;
+      background-color: #5bc0de;
+      border-color: #46b8da;
+    }
+  </style>
+</block>
+<block name="main">
+  <div class="container">
+  	<!-- 导入数据 -->
+  	<form id="import-form" action="<?php echo U('Admin/Benz/import'); ?>" enctype="multipart/form-data" style="display:inline-block;" method="post">
+  		<input id="file" type="file" name="file" style="display:none" onchange="javascript:importExcel();">
+  		<input class="btn btn-success" type="button" value="导入数据" onclick="javascript:openfile();">
+  		<!-- <input type="submit" class="btn btn-danger" value="提交"> -->
+  	</form>
+		<!-- 导出数据 -->
+    <form id="export-form" action="<?php echo U('Admin/Benz/export'); ?>" style="display:inline-block;" method="post">
+      <input type="submit" class="btn btn-info" value="导出数据" >
+    </form>
+  
+  </div>
+	<script type="text/javascript">
+		function openfile(){
+      $("#file").click();
+    }
+    function importExcel(){
+      $("#import-form").submit();
+    }
+
+    function openCodeFile() {
+      $("#codefile").click();
+    }
+    $(".location").click(function(event) {
+      window.location.href = "http://www.baidu.com";
+    });
+	</script>
+</block>

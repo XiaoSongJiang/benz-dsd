@@ -1,0 +1,264 @@
+<extend name="_Layout/main"/>
+<block name="style">
+  <style type="text/css">
+    .main-area {
+      background: url("images/code_bg.png") center no-repeat;
+    }
+    .setting .qr {
+      background: url("__PUBLIC__/images/code_bg.png") center no-repeat;
+      text-align: center;
+      height: 300px;
+      height: 600px;
+    }
+    .setting .qr img {
+      margin-top: 20px;
+    }
+    .setting .qr span {
+      font-size: 18px;
+      color: #666;
+      margin-top: 20px;
+      padding-left: 20px;
+      display: block;
+    }
+    .config{
+      margin-top: 20px;
+      margin-bottom: 20px;
+    }
+    .config > span{
+      font-size: 15px;
+    }
+    .config > .config-title {
+      display: inline-block;
+      width: 200px;
+    }
+
+    .config .config-item{
+      display: inline-block;
+      margin-left: 10px;
+      margin-top: 10px;
+    }
+    .config .config-item input{
+      margin-right: 2px;
+      margin-top: 20px;
+    }
+    .config .config-item label{
+      margin-right: 20px;
+      cursor: pointer;
+    }
+
+    .sub input{
+      display: inline-block;
+      border-radius: 2px;
+      width: 100px;
+      height: 36px;
+      line-height: 36px;
+      text-align: center;
+      margin-right: 25px;
+      margin-top: 30px;
+      background-color: #2991ea;
+      color: #fff;
+      margin-left: 12px;
+      cursor: pointer;
+    }
+    /* span模拟开关 */
+    .switch-button {
+      width: 46px;
+      height: 24px;
+      position: relative;
+      border-radius: 15px;
+
+      background-clip: content-box;
+      display: inline-block;
+      cursor: pointer;
+    }
+
+    .switch-button.on {
+      background: #00FF33;
+    }
+
+    .switch-button.off {
+      border: 1px solid #dfdfdf;
+      background-color: #fdfdfd;
+      box-shadow: #dfdfdf 0 0 0 0 inset;
+    }
+
+    .switch-button span {
+      position: absolute;
+      top: 1px;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+
+    .switch-button.on span {
+      right: 1px;
+      background: #fdfdfd;
+    }
+
+    .switch-button.off span {
+      left: 1px;
+      height: 21px;
+      width: 21px;
+      background-color: #fff;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+    }
+    /*开关样式*/
+    .switch {
+      width: 46px;
+      height: 24px;
+      position: relative;
+      border: 1px solid #dfdfdf;
+      background-color: #fdfdfd;
+      box-shadow: #dfdfdf 0 0 0 0 inset;
+      border-radius: 15px;
+
+      background-clip: content-box;
+      display: inline-block;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      -o-appearance: none;
+      appearance: none;
+      user-select: none;
+      outline: none;
+      cursor: pointer;
+    }
+
+    .switch:before {
+      content: '';
+      width: 22px;
+      height: 22px;
+      position: absolute;
+      top: 0;
+      left: 0;
+      border-radius: 15px;
+      background-color: #fff;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+    }
+
+    .switch:checked {
+      border-color: #00FF33;
+      box-shadow: #00FF33 0 0 0 16px inset;
+      background-color: #00FF33;
+    }
+
+    .switch:checked:before {
+      left: 22px;
+    }
+
+    .switch.switch-animbg {
+      transition: background-color ease 0.4s;
+    }
+
+    .switch.switch-animbg:before {
+      transition: left 0.3s;
+    }
+
+    .switch.switch-animbg:checked {
+      box-shadow: #dfdfdf 0 0 0 0 inset;
+      background-color: #00FF33;
+      transition: border-color 0.4s, background-color ease 0.4s;
+    }
+
+    .switch.switch-animbg:checked:before {
+      transition: left 0.3s;
+    }
+
+    .switch.switch-anim {
+      transition: border cubic-bezier(0, 0, 0, 1) 0.4s, box-shadow cubic-bezier(0, 0, 0, 1) 0.4s;
+    }
+
+    .switch.switch-anim:before {
+      transition: left 0.3s;
+    }
+
+    .switch.switch-anim:checked {
+      box-shadow: #00FF33 0 0 0 16px inset;
+      background-color: #00FF33;
+      transition: border ease 0.4s, box-shadow ease 0.4s, background-color ease 1.2s;
+    }
+
+    .switch.switch-anim:checked:before {
+      transition: left 0.3s;
+    }
+  </style>
+  <link rel="stylesheet" href="__PUBLIC__/css/order.css">
+</block>
+<block name="main">
+  <div class="list-filter" style="font-size: 16px;">
+    推送消息设置
+  </div>
+  
+  <div>
+    <form method="post" action="__SELF__">
+      <input id="switch" style="display:none;" type="checkbox" name="c_status" <?php if($c_status) echo 'checked'; ?>>
+      <input type="hidden" name="type" value="push">
+      <div class="config">
+        <span>推送提醒：</span>
+        <span>开启后，当状态触发时SA会收到相应通知</span>
+        <label style="margin-left:25px;">
+        <span class="switch-button <?php echo $c_status ? 'on': 'off' ?>">
+          <span></span>
+        </span>
+        </label>
+      </div>
+      <div class="config">
+        <span class="config-title">请勾选提醒方式：</span>
+        <div class="config-item config-remind">
+          <input id="remindSMS" type="radio" name="c_type" value="1" <eq name="c_type" value="1">checked="true"</eq>>
+          <label for="remindSMS" style="margin-right:10px;">短信提醒</label>
+          <input id="remindWX" type="radio" name="c_type" value="2" <eq name="c_type" value="2">checked="true"</eq>>
+          <label for="remindWX">微信提醒</label>
+        </div>
+      </div>
+      <div class="config">
+        <span class="config-title">请勾选需要提醒的状态：</span>
+        <div class="config-item">
+          <input type="checkbox" name="c_value[]" value="A" id="statusA" <eq name="A" value="A">checked="true"</eq>>
+          <label for="statusA">登记进厂(DMS)</label>
+          <input type="checkbox" name="c_value[]" value="A1" id="statusA1" <eq name="A1" value="A1">checked="true"</eq>>
+          <label for="statusA1">调度派单(DOS)</label>
+          <input type="checkbox" name="c_value[]" value="A2" id="statusA2" <eq name="A2" value="A2">checked="true"</eq>>
+          <label for="statusA2">调度交单(DOS)</label>
+          <input type="checkbox" name="c_value[]" value="B" id="statusB" <eq name="B" value="B">checked="true"</eq>>
+          <label for="statusB">开　　钟(DMS)</label>
+          <input type="checkbox" name="c_value[]" value="D" id="statusD" <eq name="D" value="D">checked="true"</eq>>
+          <label for="statusD">关　　钟(DMS)</label>
+        </div>
+        <!-- <span class="config-title"></span> -->
+        <div class="config-item" style="margin-left:214px;">
+          <input type="checkbox" name="c_value[]" value="F1" id="statusF1" <eq name="F1" value="F1">checked="true"</eq>>
+          <label for="statusF1">终检开始(DOS)</label>
+          <input type="checkbox" style="margin-left:2px;" name="c_value[]" value="F2" id="statusF2" <eq name="F2" value="F2">checked="true"</eq>>
+          <label for="statusF2">终检结束(DOS)</label>
+          <input type="checkbox" name="c_value[]" value="F3" id="statusF3" <eq name="F3" value="F3">checked="true"</eq>>
+          <label for="statusF3">洗车开始(DOS)</label>
+          <input type="checkbox" style="margin-left:0px;" name="c_value[]" value="F4" id="statusF4" <eq name="F4" value="F4">checked="true"</eq>>
+          <label for="statusF4">洗车结束(DOS)</label>
+          <input type="checkbox" style="margin-left:1px;" name="c_value[]" value="G" id="statusG" <eq name="G" value="G">checked="true"</eq>>
+          <label for="statusG">准备交车(DMS)</label>
+        </div>
+
+      </div>
+      <div class="sub">
+        <input type="submit" value="保存">
+      </div>
+    </form>
+  </div>
+
+</block>
+
+<block name="script">
+  <script>
+    $(function () {
+      $('.switch-button').click(function () {
+        $('#switch').click()
+        if ($(this).hasClass('on')) {
+          $(this).removeClass('on').addClass('off')
+        } else {
+          $(this).removeClass('off').addClass('on')
+        }
+      })
+    })
+  </script>
+</block>

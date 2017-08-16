@@ -1,0 +1,438 @@
+<!doctype html>
+<html lang="zh">
+
+<head>
+  <meta charset="utf-8">
+  <title>星徽透明车间</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="renderer" content="webkit|ie-comp|ie-stand">
+  <meta name="author" content="{:C('WEB_SITE_TITLE')}">
+  <meta name="keywords" content="{$meta_keywords}">
+  <meta name="description" content="{$meta_description}">
+  <meta name="generator" content="CoreThink">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="{:C('WEB_SITE_TITLE')}">
+  <meta name="format-detection" content="telephone=no,email=no">
+  <link rel="apple-touch-icon" type="image/x-icon" href="__ROOT__/favicon.ico">
+  <link rel="shortcut icon" type="image/x-icon" href="__ROOT__/favicon.ico">
+
+  <link rel="stylesheet" type="text/css" href="__PUBLIC__/css/main.css?v=__PUBLIC_VERSION__">
+
+  <link rel="stylesheet" type="text/css" href="__ADMIN_CSS__/{:C('ADMIN_THEME')}.css">
+  <block name="style"></block>
+  <script type="text/javascript" src="__PUBLIC__/js/echarts.min.js"></script>
+  <script type="text/javascript" src="__PUBLIC__/js/common.js?v=__PUBLIC_VERSION__"></script>
+  <!-- 如果配置里CDN静态资源列表则使用CDN否则使用静态资源 -->
+  <style type="text/css">
+    .navbar {
+      background-color: #000;
+      border-bottom: none;
+      height: 80px;
+    }
+
+    .navbar-menu li {
+      margin-top: 16px;
+      margin-left: 15px;
+      font-size: 17px !important;
+    }
+
+    .navbar-right {
+      margin-top: 15px;
+      font-size: 16px;
+    }
+
+    .navbar-nav>.active>a {
+      color: #000 !important;
+      font-weight: 600;
+      background-color: #fff !important;
+      border-bottom: #fff;
+    }
+
+    .panel-heading {
+      background-color: #fff;
+    }
+
+    #sidebar {
+      position: absolute;
+      top: 80px !important;
+    }
+
+    #main {
+      top: 80px !important;
+    }
+
+    .list-group-item {
+      border-color: #d9d9d9;
+    }
+
+    .list-group-item.active {
+      color: #f05161;
+      background-color: #fff;
+      border-color: #d9d9d9;
+      border-right: 4px solid #f05161;
+      border-right-width: 4px !important;
+    }
+  </style>
+  <?php if(C('CDN_RESOURCE_LIST')): ?> {:C('CDN_RESOURCE_LIST')}
+  <?php else: ?>
+  <script type="text/javascript" src="__PUBLIC__/libs/jquery/1.x/jquery-1.11.3.min.js"></script>
+  <?php endif; ?>
+  <block name="libs"></block>
+</head>
+
+<body id="<?php echo 'body-'.$__CONTROLLER_NAME__.'-'.$__ACTION_NAME__; ?>" class="<?php echo 'body-'.$__CONTROLLER_NAME__.' body-'.$__CONTROLLER_NAME__.'-'.$__ACTION_NAME__; ?>">
+
+  <div class="header">
+    <img src="__PUBLIC__/images/logo.svg" alt="" class="logo">
+    <div class="title">星徽透明车间</div>
+    <div class="user-center">
+      <div class="oab">
+        <a href="javascript:void(0);" id="loginOAB"><img src="__PUBLIC__/images/oab.png" alt=""></a>
+        <div class="name">OAB</div>
+      </div>
+      <div class="user">
+        <img src="__PUBLIC__/images/user_icon.png" alt="">
+        <div class="name">{$__USER__.username}</div>
+        <div class="setting">
+          <a href="{:U('Admin/User/password')}" class="password">修改密码</a>
+          <a href="{:U('Admin/Public/logout')}" class="logout">注销</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="order-wrap">
+    <div class="nav yes-hover">
+      <div class="menu">
+        <img src="__PUBLIC__/images/list.png">
+      </div>
+      <ul>
+        <foreach name="menulist" item="menu">
+          <li class="{$menu.class}">
+            <a href="{$menu.href}">
+                <img src="__PUBLIC__/images/{$menu.img}">
+                <span>{$menu.name}</span>
+              </a>
+          </li>
+        </foreach>
+      </ul>
+    </div>
+    <div class="main-area">
+      <block name="main"></block>
+    </div>
+    <div class="footer">
+      © 2016 北京梅赛德斯-奔驰销售服务有限公司 &nbsp; 版权所有 &nbsp;
+      <if condition="$dealer_name neq ''">
+        | &nbsp; {$dealer_name}
+      </if>
+    </div>
+    <block name="container">
+      <!-- <div class="nav no-hover">
+            <img class="menu" src="__PUBLIC__/images/list.png">
+            <ul>
+            <foreach name="menulist" item="menu">
+              <li>
+              <img src="__PUBLIC__/images/{$menu.img}">
+              <span>
+                  <a href="{$menu.href}">{$menu.name}</a>
+              </span>
+              </li>
+            </foreach>
+            </ul>
+          </div> -->
+
+    </block>
+  </div>
+
+  <div class="clearfix full-script">
+    <div class="container-fluid">
+      <div id="universal">
+        <script type="text/javascript">
+          var $_var_{$__ACTION_NAME__} = {<block name='var'></block>};
+        </script>
+      </div>
+      <script type="text/javascript" src="__PUBLIC__/js/admin.min.js?v={:C('STATIC_VERSION')}"></script>
+      <block name="script"></block>
+    </div>
+  </div>
+
+  <!--数据统计弹窗-->
+  <div class="data-modal modal-wrap">
+    <div class="modal-head">
+      数据统计
+      <img src="__PUBLIC__/images/close.png" alt="" class="close">
+    </div>
+    <div class="modal-body">
+      <h2>登记进厂量统计<span>（台/次）</span></h2>
+      <div class="sa-data">
+        <ul>
+          <li>
+            <img src="__PUBLIC__/images/day_data.png" alt="">
+            <div>
+              <h3>{$today_check}</h3>
+              <p>当日登记进厂量</p>
+            </div>
+          </li>
+          <li>
+            <img src="__PUBLIC__/images/month_data.png" alt="">
+            <div>
+              <h3>{$month_check}</h3>
+              <p>本月总登记进厂量（{$month}，含当日）</p>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <span class="close">关闭</span>
+    </div>
+  </div>
+
+  <!--编辑和查看详情弹窗弹窗-->
+  <div class="list-modal modal-wrap">
+    <div class="modal-head">
+      工单WIP <span class="wip">12345</span>
+      <img src="__PUBLIC__/images/close.png" alt="" class="close">
+    </div>
+    <div class="modal-body">
+      <div class="clearfix form-modal">
+
+        <!-- hidden data -->
+        <input type="hidden" data-name="log_id" id="log_id">
+        <input type="hidden" data-name="normal_status" id="normal_status">
+        <input type="hidden" data-name="a_time" id="a_time">
+        <input type="hidden" data-name="g_time" id="g_time">
+
+        <!-- Line 1 车牌号 客户要求时间-->
+        <div class="form-group form-left">
+          <label>车牌号：</label>
+          <input type="text" class="form-control" value="京N GG787" disabled data-name="registration_no">
+        </div>
+
+        <div class="form-group form-right">
+          <label>客户要求时间：</label>
+          <span class="form-control">
+              <img class="tip-img" src="__PUBLIC__/images/cus_time.png" alt="">
+              <span class="taking-time">2016-12-31 12:43</span>
+          </span>
+        </div>
+
+        <!-- deprecated -->
+        <!-- <div class="form-group form-left">
+            <label>是否预约：</label>
+            <select class="form-control" id="reserve_status" data-name="reserve_status">
+              <option value="1">是</option>
+              <option value="">否</option>
+            </select>
+          </div> -->
+
+        <!-- Line 2 服务类型 创建工单时间 -->
+
+        <div class="form-group form-left">
+          <label>服务类型：</label>
+          <select class="form-control" id="log_type" data-name="log_type">
+              <option value="">其他</option>
+              <option value="保养">保养</option>
+              <option value="一般维修">一般维修</option>
+              <option value="事故维修">事故维修</option>
+              <option value="保修">保修</option>
+            </select>
+        </div>
+
+        <div class="form-group form-right">
+          <label>创建工单：</label>
+          <input type="text" class="form-control start_timestamp" value="2016-12-31 12:43" disabled data-name="start_timestamp">
+        </div>
+
+        <div class="indent"></div>
+
+        <!-- Line 3 登记进厂 SA交单给调度 -->
+        <div class="form-group form-left">
+          <label>登记进厂：</label>
+          <input type="text" class="form-control check_in" value="2016-12-31 12:43" disabled data-name="check_in">
+        </div>
+
+        <div class="form-group form-right">
+          <label>SA交单给调度：</label>
+          <input type="text" id="handover_time" class="form-control handover_time" value="2016-12-31 12:43" disabled data-name="handover_time">
+          <span class="current-time"></span>
+        </div>
+
+        <!-- Line 4 派单 交单 -->
+        <div class="form-group form-left edit">
+          <label>派单：</label>
+          <input type="text" id="dispatch_time" class="form-control" value="" placeholder="请选择日期" data-name="dispatch_time">
+          <span class="current-time"></span>
+        </div>
+        <div class="form-group form-right edit">
+          <label>交单：</label>
+          <input type="text" id="complete_time" class="form-control" value="" placeholder="请选择日期" data-name="complete_time">
+          <span class="current-time"></span>
+        </div>
+
+        <!-- Line 5 开钟 关钟 -->
+        <div class="form-group form-left">
+          <label>开钟：</label>
+          <input type="text" id="b_time" class="form-control b_time" value="等待数据上传..." disabled data-name="b_time">
+        </div>
+        <div class="form-group form-right">
+          <label>关钟：</label>
+          <input type="text" id="d_time" class="form-control d_time" value="等待数据上传..." disabled data-name="d_time">
+        </div>
+
+        <!-- Line 6 终检开始 终检结束 -->
+        <div class="form-group form-left edit">
+          <label>终检开始：</label>
+          <input type="text" id="final_start_time" class="form-control" value="2016-12-31 12:43" disabled data-name="final_start_time">
+          <span class="current-time"></span>
+        </div>
+        <div class="form-group form-right edit">
+          <label>终检结束：</label>
+          <input type="text" id="final_end_time" class="form-control" value="2016-12-31 12:43" disabled data-name="final_end_time">
+          <span class="current-time"></span>
+        </div>
+
+        <!-- Line 7 洗车开始 洗车结束 -->
+        <div class="form-group form-left edit">
+          <label>洗车开始：</label>
+          <input type="text" id="wash_start_time" class="form-control" value="2016-12-31 12:43" disabled data-name="wash_start_time">
+          <span class="current-time"></span>
+        </div>
+        <div class="form-group form-right edit">
+          <label>洗车结束：</label>
+          <input type="text" id="wash_end_time" class="form-control" value="2016-12-31 12:43" disabled data-name="wash_end_time">
+          <span class="current-time"></span>
+        </div>
+
+        <div class="indent"></div>
+
+        <div class="form-group form-left">
+          <label>目前工种：</label>
+          <select class="form-control" id="work_type" data-name="work_type">
+              <option value="保养">保养</option>
+              <option value="机电维修">机电维修</option>
+              <option value="事故车维修">事故车维修</option>
+              <option value="其他">其他</option>
+            </select>
+        </div>
+
+        <div class="form-group form-left declare">
+          <label>说明：</label>
+          <textarea class="form-control order-desc" placeholder="请输入说明信息" id="log_desc" maxlength="1000"></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <span class="save">保存</span>
+      <span class="cancel">取消</span>
+      <!--查看详情是下面的关闭按钮-->
+      <span class="close">关闭</span>
+    </div>
+  </div>
+
+  <!--解绑微信弹窗-->
+  <!--注意：用户列表的账号解冻弹窗也是这个-->
+  <div class="weixin-modal modal-wrap">
+    <div class="modal-head">
+      解绑微信
+      <img src="__PUBLIC__/images/close.png" alt="" class="close">
+    </div>
+    <div class="modal-body">
+      <div>
+        确认解绑该账号微信？
+      </div>
+    </div>
+    <div class="modal-footer">
+      <span class="save">确认</span>
+      <span class="close cancel">取消</span>
+    </div>
+  </div>
+
+  <!--保存成功弹窗-->
+  <!--注意：编辑保存成功、解绑成功、冻结成功的弹窗都应用这个样式-->
+  <div class="save-success-modal modal-wrap">
+    <div class="modal-head">
+      保存成功
+      <img src="__PUBLIC__/images/close.png" alt="" class="close">
+    </div>
+    <div class="modal-body">
+      <div>
+        <img src="__PUBLIC__/images/success.png" alt=""> 保存成功！
+      </div>
+    </div>
+    <div class="modal-footer">
+      <span class="close">关闭</span>
+    </div>
+  </div>
+
+  <div class="save-failure-modal modal-wrap" style="display:none;">
+    <div class="modal-head">
+      保存失败
+      <img src="__PUBLIC__/images/close.png" alt="" class="close">
+    </div>
+    <div class="modal-body">
+      <div>
+        <span class="tips">填写时间不能大于交车时间！</span>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <span class="close">关闭</span>
+    </div>
+  </div>
+
+  <!--弹窗背景-->
+  <div class="modal-bg"></div>
+
+</body>
+<script>
+  $(document).ready(function ($) {
+
+    $('.modal-bg').height($(document).height());
+
+    var nav = $('.nav');
+    $('.menu').on('click', function () {
+      if (nav.is('.yes-hover')) {
+        nav.removeClass('yes-hover');
+        nav.addClass('no-hover');
+      } else {
+        nav.removeClass('no-hover');
+        nav.addClass('yes-hover');
+      }
+    });
+
+    $('#loginOAB').click(function () {
+      var auth = "{$login_auth}";
+      if (auth != 'OAB') {
+        // window.location.href = 'http://123.56.195.240:8080/oab/useritfserver/loginFrOtherSys';
+        alert('没有权限登录OAB');
+        return false;
+      }
+      loginOAB();
+    })
+
+    var auto = "{$autoLogin}";
+    if (auto == 'OAB') {
+      loginOAB()
+    }
+
+    function loginOAB() {
+      var $form = $("<form>").attr('action', "{$OABLOGIN}").attr('method', 'POST');
+
+      // 用户名
+      var $input = $("<input>").attr('name', 'user_id');
+      $input.val('{$username}');
+      $form.append($input);
+      // var $password = $("<input>").attr('name','password');
+      // $password.val('{$password}');
+      // $form.append($password);
+
+      $form.css('display', 'none')
+
+      $("body").append($form);
+      $form.submit();
+    }
+
+  });
+</script>
+
+</html>

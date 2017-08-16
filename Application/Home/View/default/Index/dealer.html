@@ -1,0 +1,240 @@
+<extend name="_Layout/main"/>
+
+<block name="title"><title>{$meta_title}</title></block>
+
+
+<block name="style">
+    <style type="text/css">
+        .main {
+          margin-top: 6%;
+        }
+        .main .title {
+          color: #6d6d6d;
+          font-weight: bold;
+          font-size: 18px;
+          text-align: center;
+        }
+        .main .type {
+          position: relative;
+          width: 330px;
+          height: 120px;
+          margin: 15px auto 5px;
+          border: 2px solid #a3a3a3;
+          color: #a3a3a3;
+          border-radius: 45px;
+          vertical-align: middle;
+          overflow: hidden;
+        }
+        .type .img {
+          display: inline-block;
+          margin-left: 20px;
+          width: 65px;
+          height: 65px;
+          vertical-align: middle;
+          background: url('__HOME_IMG__/icon/type-default.png');
+          background-size: cover;
+        }
+        .type span {
+          font-family: '华文黑体,黑体';
+          font-size: 22px;
+          font-weight: 700;
+          padding-left: 10px;
+          line-height: 120px;
+          -webkit-user-select: none;
+          user-select: none;
+        }
+        .type .time {
+          position: absolute;
+          right: -3px;
+          bottom: -34px;
+          font-family: 'Arial';
+          font-size: 80px;
+          font-weight: 900;
+          z-index: -99;
+        }
+        .type.active {
+          border: 2px solid #4da580;
+          color: #4da580;
+        }
+        .type.active .img {
+          background: url('__HOME_IMG__/icon/type-active.png');
+          background-size: cover;
+        }
+
+        .service {
+          margin-top: 6%;
+        }
+        .tips {
+          width: 80%;
+          margin-top: 5px;
+        }
+        .service input {
+          width: 87.5%;
+          font-size: 16px;
+          margin: 2% 0;
+          margin-left: 4%;
+          padding: 5px 5px;
+          box-sizing: content-box;
+          background-color: #e4e4e4;
+          border: 1px solid #ccc;
+        }
+        .btn-confirm {
+          margin-bottom: 15px;
+        }
+
+        /* S5 适配 */
+        @media (max-width: 320px) { 
+          
+          .main .type {
+            position: relative;
+            width: 280px;
+            height: 100px;
+            margin: 15px auto 5px;
+            border: 2px solid #a3a3a3;
+            color: #a3a3a3;
+            border-radius: 38px;
+          }
+          .type .img {
+            margin-left: 15px;
+            width: 50px;
+            height: 50px;
+          }
+          .type span {
+            font-family: '华文黑体,黑体';
+            font-size: 18px;
+            font-weight: 700;
+            padding-left: 10px;
+            line-height: 100px;
+            -webkit-user-select: none;
+            user-select: none;
+          }
+          .type .time {
+            right: -2px;
+            bottom: -28px;
+            font-size: 70px;
+            z-index: -99;
+          }
+          .type.active {
+            border: 2px solid #4da580;
+            color: #4da580;
+          }
+          .tips {
+            width: 280px;
+          }
+          .btn-confirm {
+            width: 66%;
+            height: 40px;
+            margin-left: 17%;
+            margin-top: 8px;
+            font-size: 18px;
+          }
+        }
+    </style>
+</block>
+
+<block name="main">
+
+    <div class="top">
+        <img src="__HOME_IMG__/icon/logo.png" alt="">
+    </div>
+    <form id="form" action="<?php echo U('service'); ?>" method="post">
+    <div class="main">
+        <p class="title">请选择服务类型</p>
+        <div class="type active">
+            <!-- <img src="__HOME_IMG__/icon/type-active.png" alt=""> -->
+            <div class="img"></div>
+            <span>基础A保养</span>
+            <span class="time">{$timeA}</span>
+        </div>
+        <div class="type">
+            <div class="img"></div>
+            <span>基础B保养</span>
+            <span class="time">{$timeB}</span>
+        </div>
+
+        <div class="service">
+            <p><img class="tips" src="__HOME_IMG__/icon/index-wip-tip.png" alt=""></p>
+            <input id="wip" name="wip" class="input" type="text">
+            <input id="type" name="type" type="hidden" value="A">
+        </div>
+        <input class="btn btn-ok btn-confirm" type="button" value="开始计时">
+    </div>
+    </form>
+    <!-- UI dealer -->
+    <div class="ui shadow">
+        <div class="ui content confirm-dealer" style="padding: 30px 20px 20px;">
+            <p class="ui title">基础<span class="service-type">A</span>保养需要<span class="service-time">60</span>分钟</p>
+            <p class="ui sub-title">从您确认工单开始至交还钥匙结束</p>
+            <center>
+                <input class="btn ui button button-cancle" type="button" value="取消">
+                <input class="btn ui button button-success" type="button" value="确定">
+            </center>
+        </div>
+    </div>  
+</block>
+
+<block name="script">
+    
+    <script language=”JavaScript”>
+      javascript:window.history.forward(1);
+    </script>
+    <script type="text/javascript">
+
+        $(function(){
+            
+            var service_type = 0;
+            
+            // click handler
+            $(".type").each(function(index) {
+               $(this).click(function() {
+                    if(service_type == index){
+                        return;
+                    }else {
+                        service_type = index;
+                    }
+                    $(this).toggleClass('active').siblings('.type').toggleClass('active');
+                    $("#type").val(service_type?'B':'A');
+                    $(".service-type").html(service_type?'B':'A');
+                    $(".service-time").html(service_type?'90':'60');
+               }); 
+            });
+
+            $(document).keydown(function (event) {
+                var key = event.keyCode | event;
+                if (key == 13) {
+                    return false;
+                };
+            });
+
+            $(".btn-confirm").click(function() {
+                var redirect = "<?php echo U('service'); ?>";
+                var wip = $("#wip").val();
+                if(wip.length!=7) {
+                    benz.ui.alert('您输入的服务单号有误，请联系服务顾问!');
+                    return false;
+                }
+                var ajaxWipUrl = "<?php echo U('Home/Common/ajaxCheckWip') ?>"
+                var ajaxParam = {
+                    wip: wip
+                }
+                $.ajax({
+                    url: ajaxWipUrl,
+                    data: ajaxParam,
+                })
+                .done(function(res) {
+                    if(res.status == 1) {
+                        benz.ui.dealer();
+                    }else{
+                        benz.ui.alert('您输入的服务单号有误，请联系服务顾问!');
+                        return false;
+                    }
+                })
+            });
+        });
+    </script>
+</block>
+
+
+
+   
+

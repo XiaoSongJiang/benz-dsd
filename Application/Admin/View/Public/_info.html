@@ -1,0 +1,141 @@
+<!--编辑和查看详情弹窗弹窗-->
+<div class="list-modal modal-wrap">
+  <div class="modal-head">
+    工单WIP <span class="wip">12345</span>
+    <img src="__PUBLIC__/images/close.png" alt="" class="close">
+  </div>
+  <div class="modal-body">
+    <div class="clearfix form-modal">
+			
+			<!-- hidden data -->
+    	<input type="hidden" data-name="log_id" id="log_id">
+      <input type="hidden" data-name="normal_status" id="normal_status">
+      <input type="hidden" data-name="a_time" id="a_time">
+      <input type="hidden" data-name="g_time" id="g_time">
+
+    	<!-- Line 1 车牌号 客户要求时间-->
+      <div class="form-group form-left">
+        <label>车牌号：</label>
+        <input type="text" class="form-control" value="京N GG787" disabled data-name="registration_no">
+      </div>
+
+      <div class="form-group form-right">
+        <label>客户要求时间：</label>
+        <span class="form-control">
+          <img class="tip-img" src="__PUBLIC__/images/cus_time.png" alt="">
+          <span class="taking-time">2016-12-31 12:43</span>
+        </span>
+      </div>
+
+      <!-- deprecated -->
+      <!-- <div class="form-group form-left">
+        <label>是否预约：</label>
+        <select class="form-control" id="reserve_status" data-name="reserve_status">
+          <option value="1">是</option>
+          <option value="">否</option>
+        </select>
+      </div> -->
+			
+			<!-- Line 2 服务类型 创建工单时间 -->
+      
+      <div class="form-group form-left">
+        <label>服务类型：</label>
+        <select class="form-control" id="log_type" data-name="log_type">
+          <option value="其他">其他</option>
+          <option value="保养">保养</option>
+          <option value="一般维修">一般维修</option>
+          <option value="事故维修">事故维修</option>
+          <option value="保修">保修</option>
+        </select>
+      </div>
+			
+			<div class="form-group form-right">
+        <label>创建工单：</label>
+        <input type="text" class="form-control start_timestamp" value="2016-12-31 12:43" disabled data-name="start_timestamp">
+      </div>
+
+      <div class="indent"></div>
+      
+      <!-- Line 3 登记进厂 SA交单给调度 -->
+      <div class="form-group form-left">
+        <label>登记进厂：</label>
+        <input type="text" class="form-control check_in" value="2016-12-31 12:43" disabled data-name="check_in">
+      </div>
+
+      <div class="form-group form-right">
+        <label>SA交单给调度：</label>
+        <input type="text" id="handover_time" class="form-control handover_time" value="2016-12-31 12:43" disabled data-name="handover_time">
+        <span class="current-time"></span>
+      </div>
+
+      <!-- Line 4 派单 交单 -->
+      <div class="form-group form-left edit">
+        <label>派单：</label>
+        <input type="text" id="dispatch_time" class="form-control" value="" placeholder="请选择日期" data-name="dispatch_time">
+        <span class="current-time"></span>
+      </div>
+      <div class="form-group form-right edit">
+        <label>交单：</label>
+        <input type="text" id="complete_time" class="form-control" value="" placeholder="请选择日期" data-name="complete_time">
+        <span class="current-time"></span>
+      </div>
+
+      <!-- Line 5 开钟 关钟 -->
+      <div class="form-group form-left">
+        <label>开钟：</label>
+        <input type="text" id="b_time" class="form-control b_time" value="等待数据上传..." disabled data-name="b_time">
+      </div>
+      <div class="form-group form-right">
+        <label>关钟：</label>
+        <input type="text" id="d_time" class="form-control d_time" value="等待数据上传..." disabled data-name="d_time">
+      </div>
+      
+      <!-- Line 6 终检开始 终检结束 -->
+      <div class="form-group form-left edit">
+        <label>终检开始：</label>
+        <input type="text" id="final_start_time" class="form-control" value="2016-12-31 12:43" disabled data-name="final_start_time">
+        <span class="current-time"></span>
+      </div>
+      <div class="form-group form-right edit">
+        <label>终检结束：</label>
+        <input type="text" id="final_end_time" class="form-control" value="2016-12-31 12:43" disabled data-name="final_end_time">
+        <span class="current-time"></span>
+      </div>
+			
+			<!-- Line 7 洗车开始 洗车结束 -->
+      <div class="form-group form-left edit">
+        <label>洗车开始：</label>
+        <input type="text" id="wash_start_time" class="form-control" value="2016-12-31 12:43" disabled data-name="wash_start_time">
+        <span class="current-time"></span>
+      </div>
+      <div class="form-group form-right edit">
+        <label>洗车结束：</label>
+        <input type="text" id="wash_end_time" class="form-control" value="2016-12-31 12:43" disabled data-name="wash_end_time">
+        <span class="current-time"></span>
+      </div>
+
+      <div class="indent"></div>
+
+      <div class="form-group form-left">
+        <label>目前工种：</label>
+        <select class="form-control" id="work_type" data-name="work_type">
+          <option value="保养">保养</option>
+          <option value="机电维修">机电维修</option>
+          <option value="事故车维修">事故车维修</option>
+          <option value="其他">其他</option>
+        </select>
+      </div>
+      
+      <div class="form-group form-left declare">
+        <label>说明：</label>
+        <textarea class="form-control order-desc" placeholder="请输入说明信息" id="log_desc" maxlength="1000"></textarea>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <span class="save">保存</span>
+    <span class="cancel">取消</span>
+    <!--查看详情是下面的关闭按钮-->
+    <span class="close">关闭</span>
+  </div>
+</div>

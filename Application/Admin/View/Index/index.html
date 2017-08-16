@@ -1,0 +1,38 @@
+<extend name="_Layout/main"/>
+
+<block name="var">
+    "current_version": "{:C('CURRENT_VERSION')}",
+    "check_version_url": "{:U('Admin/SystemUpdate/checkVersion')}",
+    "index_url": "{:U('Index/index')}",
+    "user_reg_date": {:$user_reg_date},
+    "user_reg_count": {:$user_reg_count}
+</block>
+
+<block name="libs">
+    <script src="__PUBLIC__/libs/chart/1.x/Chart.min.js"></script>
+</block>
+
+<block name="container">
+    <div class="container">
+            
+        <div class="chart">
+            <div class="row">
+
+                <div class="col-xs-12 col-sm-6 col-md-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <div class="pull-right">
+                                <button id="daterange_set" class="btn btn-default btn-sm" style="margin-top:-5px;margin-right:-5px;"><span class="fa fa-cog"></span></button>
+                            </div>
+                            <i class="fa fa-area-chart"></i> 用户增长统计
+                        </div>
+                        <div class="panel-body">
+                            <h5 class="text-center">{$start_date}－{$end_date} {$count_day}天用户增长</h5>
+                            <canvas id="mychart" style="width:100%;height:300px;"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</block>

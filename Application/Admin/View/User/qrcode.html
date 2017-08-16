@@ -1,0 +1,43 @@
+<extend name="_Layout/main"/>
+<block name="style">
+  <style type="text/css">
+    .main-area {
+      background: url("images/code_bg.png") center no-repeat;
+    }
+    .setting .qr {
+      background: url("__PUBLIC__/images/code_bg.png") center no-repeat;
+      text-align: center;
+      height: 300px;
+      height: 600px;
+    }
+    .setting .qr img {
+      margin-top: 20px;
+    }
+    .setting .qr span {
+      font-size: 18px;
+      color: #666;
+      margin-top: 20px;
+      padding-left: 20px;
+      display: block;
+    }
+  </style>
+  <link rel="stylesheet" href="__PUBLIC__/css/order.css">
+</block>
+<block name="main">
+  <div class="list-filter">
+    绑定微信二维码
+  </div>
+  <div class="setting">
+    <div class="qr">
+      <img src="__PUBLIC__/images/wechat.png" alt="">
+      <span>
+        使用手机扫描此二维码， <br>
+        绑定微信。
+      </span>
+    </div>
+  </div>
+</block>
+
+<block name="script">
+  
+</block>

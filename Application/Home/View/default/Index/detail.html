@@ -1,0 +1,467 @@
+<extend name="_Layout/main"/>
+
+<block name="title"><title>{$meta_title}</title></block>
+
+<block name="style">
+  <style type="text/css">
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      background-color: #121d31;
+    }
+    .info {
+      width: 650px;
+      height: 418px;
+      margin: 55px auto 0;
+      background: url("__HOME_IMG__/new/info.png") no-repeat;
+      color: #9aa5b9;
+      font-size: 28px;
+      position: relative;
+    }
+    .info .name {
+      position: absolute;
+      left: 175px;
+      top: 65px;
+      color: #fff;
+      font-size: 30px;
+    }
+    .info .avatar {
+      position: absolute;
+      left: 8px;
+      top: 9px;
+      width: 145px;
+      height: 145px;
+      border-radius: 50%;
+    }
+    .info .more {
+      position: absolute;
+      top: 155px;
+      left: 0;
+      right: 0;
+      margin: 0 78px 0 120px;
+    }
+    .more .footer {
+      font-size: 28px;
+      text-align: center;
+    }
+    .item .left {
+      display: inline-block;
+      width: 195px;
+      margin-bottom: 12px;
+    }
+    .item .call {
+      float: right;
+    }
+    .title {
+      margin-top: 80px;
+      font-size: 36px;
+      text-align: center;
+      color: #fff;
+    }
+    .circle {
+      width: 472px;
+      height: 472px;
+      margin: 50px auto 0;
+      position: relative;
+    }
+    .circle-text {
+      position: absolute;
+      width: 472px;
+      font-size: 56px;
+      color: #fff;
+      text-align: center;
+      left: 0;
+      top: 50%;
+      -webkit-transform: translate(0,-50%);
+      transform: translate(0,-50%);
+    }
+    .circle span {
+      font-size: 28px;
+    }
+    .msg {
+      border-radius: 6px;
+      background-color: rgb(255, 255, 255);
+      box-shadow: 0px 1px 6px 0px rgba(0, 0, 0, 0.13);
+      width: 650px;
+      height: 368px;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      -webkit-transform: translate(-50%, -80%);
+      transform: translate(-50%, -80%);
+      z-index: 11;
+      color: #121d31;
+      font-size: 34px;
+      text-align: center;
+    }
+    .dial {
+      display: none;
+    }
+    .dial .msg div {
+      margin: 100px 0 90px;
+      text-align: center;
+    }
+    .msg div span {
+      color: #108bf4;
+    }
+    .dial .msg > span {
+      border-radius: 4px;
+      width: 270px;
+      height: 95px;
+      line-height: 95px;
+      text-align: center;
+      display: inline-block;
+    }
+    .msg .cancel {
+      border: 1px solid rgb(78, 91, 116);
+      margin-right: 35px;
+    }
+    .msg .ok {
+      background-color: #108bf4;
+      color: #fff;
+    }
+    .follow {
+      margin-bottom: 45px;
+      height: 350px;
+    }
+    
+    .follow p {
+      text-align: center;
+    }
+
+    .qrcode {
+      width: 35%;
+      margin-top: 30px;
+      display: block;
+      margin: 20px auto;
+      z-index: 200;
+    }
+
+    .follow .tips {
+      width: 100%;
+      text-align: center;
+      font-size: 32px;
+      color: #fff;
+      margin-top: 30px;
+      padding-bottom: 70px;
+    }
+    
+    .switch {
+      text-align: center;
+      margin-top: 60px;
+      margin-bottom: 10px;
+    }
+    .down {
+      margin-bottom: 30px;
+    }
+    .switch img{
+      -webkit-animation: start 1.5s infinite ease-in-out;
+      animation: start 1.5s infinite ease-in-out;
+    }
+    @-webkit-keyframes start {
+      0%,30% {
+        opacity: .2;
+        -webkit-transform: translate(0,10px)
+      }
+
+      60% {
+        opacity: 1;
+        -webkit-transform: translate(0,0)
+      }
+
+      100% {
+        opacity: .2;
+        -webkit-transform: translate(0,-5px)
+      }
+    }
+
+    @keyframes start {
+      0%,30% {
+        opacity: .2;
+        transform: translate(0,10px)
+      }
+
+      60% {
+        opacity: 1;
+        transform: translate(0,0)
+      }
+
+      100% {
+        opacity: .2;
+        transform: translate(0,-5px)
+      }
+    }
+    .progress {
+      height: <?php echo $middle_height ?>;
+      color: #778296;
+      font-size: 32px;
+      margin-top: 65px;
+    }
+    .progress .left, .progress .right{
+      float: left;
+      width: 365px;
+      height: 100%;
+    }
+    .progress .middle {
+      width: 20px;
+      height: 100%;
+      float: left;
+      background-color: #263248;
+      border-radius: 10px;
+    }
+    .progress .left {
+      padding-right: 80px;
+      text-align: right;
+    }
+    .progress .left div {
+      height: 70px;
+      line-height: 70px;
+      margin-bottom: 50px;
+    }
+    .progress .right {
+      padding-left: 48px;
+    }
+    .progress .right div {
+      height: 70px;
+      line-height: 70px;
+      margin-bottom: 50px;
+      font-size: 32px;
+    }
+    .progress .right div p{
+      height: 40px;
+      line-height: 40px;
+    }
+    .progress .right div span {
+      font-size: 28px;
+    }
+    .progress .done {
+      color: #fff;
+    }
+    .progress .right .done {
+      line-height: 40px;
+    }
+    .progress .middle i {
+      display: block;
+      border-radius: 10px;
+      background-image: -moz-linear-gradient( 85deg, rgb(135,98,233) 0%, rgb(137,98,233) 5%, rgb(139,97,233) 24%, rgb(11,120,228) 73%, rgb(11,139,235) 91%, rgb(11,157,242) 100%, rgb(24,184,255) 100%, rgb(18,152,242) 100%, rgb(11,120,228) 100%);
+      background-image: -webkit-linear-gradient( 85deg, rgb(135,98,233) 0%, rgb(137,98,233) 5%, rgb(139,97,233) 24%, rgb(11,120,228) 73%, rgb(11,139,235) 91%, rgb(11,157,242) 100%, rgb(24,184,255) 100%, rgb(18,152,242) 100%, rgb(11,120,228) 100%);
+      background-image: -ms-linear-gradient( 85deg, rgb(135,98,233) 0%, rgb(137,98,233) 5%, rgb(139,97,233) 24%, rgb(11,120,228) 73%, rgb(11,139,235) 91%, rgb(11,157,242) 100%, rgb(24,184,255) 100%, rgb(18,152,242) 100%, rgb(11,120,228) 100%);
+    }
+    .next-page {
+      display: none;
+    }
+
+  </style>
+</block>
+
+<block name="main">
+
+  <div class="info">
+    <?php 
+      if($sa['avatar']) {
+        $avatar = "https://dsd.mercedes-benz.com.cn/benz/".$sa['avatar'];
+      }else {
+        $avatar = "__HOME_IMG__/new/avatar.png";
+      }
+    ?>
+    <img src="{$avatar}" alt="" class="avatar">
+    
+    <div class="name">您好，我是您的服务顾问 {$sa.nickname}</div>
+    <div class="more">
+      <div class="item">
+        <span class="left">车　牌　号</span>
+        <span>{$log.registration_no}</span>
+      </div>
+      <div class="item">
+        <span class="left">工　单　号</span>
+        <span>{$log.wip}</span>
+      </div>
+      <div class="item">
+        <span class="left">顾 问 电 话</span>
+        <if condition="$sa.mobile neq ''">
+        <span>{$sa.mobile}</span>
+        <img src="__HOME_IMG__/new/tel.png" alt="" class="call">
+        </if>
+      </div>
+      <div class="footer">
+        <span>本服务由</span>
+        <span> {$dealer.dealer_short} </span>
+        <span>提供</span>
+      </div>
+    </div>
+  </div>
+  <div class="title">当前服务进度</div>
+  <div class="circle">
+    <i id="circle"></i>
+    <div class="circle-text">
+      {$current}<br>
+      <span>期望交车时间 &nbsp {$log.taking_time}</span>
+    </div>
+  </div>
+
+  
+  <!-- <div class="switch">
+    <img src="__HOME_IMG__/new/down.png" alt="" class="down">
+  </div> -->
+  
+  <div class="next-page" style="position:relative;">
+    <div class="progress">
+      <div class="left">
+        <foreach name="list" item="item">
+        <div class="{$item.class}">{$item.title}</div>
+        </foreach>
+      </div>
+      <div class="middle">
+        <i style="height: {$complete_percent}%"></i>
+      </div>
+      <div class="right" style="width:280px;">
+        <foreach name="list" item="item">
+        <div class="{$item.class}">
+          <p>{$item.reneval_time}</p>
+          <p>{$item.reneval_date}</p>
+        </div>
+        </foreach>
+      </div>
+    </div>
+    <!-- <div class="switch">
+      <img src="__HOME_IMG__/new/up.png" alt="" class="up">
+    </div> -->
+    <!-- 微信长按二维码BUG FIX -->
+    <img src="__HOME_IMG__/new/code.png" style="opacity:0;position:absolute;bottom:500px;">
+
+    <div class="follow" style="margin-top:100px;">
+      <img src="__HOME_IMG__/new/code.png" alt="qrcode" class="qrcode">
+      <p class="tips">长按关注，随时了解车辆服务进度</p>
+    </div>
+
+    <div class="share">
+      <span>分享给好友</span>
+    </div>
+  </div>
+  <!--拨打电话-->
+  <div class="dial">
+    <div class="msg">
+      <div>确认拨打电话: <span>{$sa.mobile}</span> 吗？</div>
+      <span class="cancel">取消</span>
+      <span id="call" class="ok">确定</span>
+      <a href="tel:13011107531" class="mobile" style="display:none;"></a>
+    </div>
+  </div>
+  <!--点击快修-->
+  <!-- <div class="fix-wrap">
+    <div class="msg">
+      <div>
+        阁下车辆保养如在快修范围内，经销商将提供 <span>快修服务</span> 并在保证时间内完成。具体请咨询 <span>服务顾问</span>。
+      </div>
+      <span class="fix-ok">好</span>
+    </div>
+  </div> -->
+  <div class="share-bg">
+    <img class="share-tips" src="__PUBLIC__/images/share.png">
+  </div>
+  <style type="text/css">
+
+    .share { 
+      width: 55%;
+      height: 80px;
+      line-height: 80px;
+      border-radius: 3px;
+      background: #3e4965;
+      margin: 20px auto 80px auto;
+      text-align: center;
+    }
+    .share span {
+      font-size: 36px;
+      color: #fff;
+      padding: 5px 10px;
+    }
+    .share-bg{
+      display: none;
+      left: 0;
+      bottom: 0;
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+    }
+    .share-tips {
+      display: block;
+      width: 80%;
+      margin: 100px auto 0px auto;
+    }
+  </style>
+  
+</block>
+
+<block name="script">
+  <script src="__HOME_JS__/circle-progress.min.js"></script>
+  <script type="text/javascript">
+
+    $('.share').click(function() {
+      $('.share-bg').show()
+    })
+    $('.share-bg').click(function() {
+      $('.share-bg').hide()
+    })
+
+    $('.call').click(function(){
+      // 微信内拨打电话链接
+      location.href = "tel:{$sa.mobile}";
+    })
+    $('.cancel').click(function(){
+      $('.dial').hide();
+    })
+    $('.fix').click(function(){
+      $('.fix-wrap').show();
+    })
+    $('.fix-ok').click(function(){
+      $('.fix-wrap').hide();
+    })
+    // $('.down').click(function(){
+      $('.next-page').show();
+    //   $('body').animate({scrollTop: $(document).height()}, 'slow');
+    //   $(this).hide();
+    // })
+    // $('.up').click(function(){
+    //   $('.next-page').hide();
+    //   $('.down').show();
+    // })
+    // 确认拨打电话
+    $(".ok").click(function() {
+      console.log('拨打电话: {$sa.mobile}');
+      location.href = "tel:{$sa.mombile}";
+    })
+    
+    var complete_percent = parseInt("{$complete_percent}", 10)
+
+    $('#circle').circleProgress({
+      value: complete_percent / 100,  //0 0.25 0.5 0.75 1.0
+      startAngle: -Math.PI/2,
+      emptyFill: '#263248',
+      lineCap: 'round',
+      size: 472,
+      thickness: 20,
+      fill: {
+        gradient: [
+          "rgb(71,110,231)",
+  //        "rgb(130,99,233)",
+          "rgb(125,100,233)",
+  //        "rgb(119,101,232)",
+          "rgb(63,150,245)",
+  //        "rgb(44,167,250)",
+          "rgb(24,184,255)",
+  //        "rgb(18,152,242)",
+  //        "rgb(11,120,228)"
+        ]
+      }
+    });
+  </script>
+</block>
+
+
+
+
+

@@ -1,0 +1,177 @@
+<extend name="_Layout/main"/>
+<block name="style">
+  <style type="text/css">
+    .breadcrumb {
+      display: none;
+    }
+    body {
+      /*background-color: #353945;*/
+      user-select: none;
+      -webkit-user-select: none;
+    }
+    .container {
+      width: 840px;
+      margin: 0 auto;
+      margin-top: 60px;
+    }
+    .card {
+      display: inline-block;
+      width: 180px;
+      height: 180px;
+      margin-right: 80px;
+      margin-bottom: 20px;
+    }
+    .content {
+      padding: 30px 30px 30px 45px;
+      color: #fff;
+    }
+    .content p {
+      font-size: 20px;
+      line-height: 20px;
+      padding-left: 5x;
+    }
+    .content .number {
+      font-size: 40px;
+      line-height: 40px;
+      font-weight: 800;
+      margin-left: -20px;
+      text-align: center;
+    }
+
+    .successA {
+      background: url('__HOME_IMG__/admin/green-A.png');
+      background-size: cover;
+    }
+    .failureA {
+      background: url('__HOME_IMG__/admin/red-A.png');
+      background-size: cover;
+    }
+    .successAll {
+      background: url('__HOME_IMG__/admin/green-All.png');
+      background-size: cover;
+    }
+    .successB {
+      background: url('__HOME_IMG__/admin/green-B.png');
+      background-size: cover;
+    }
+    .failureB {
+      background: url('__HOME_IMG__/admin/red-B.png');
+      background-size: cover;
+    }
+    .failureAll {
+      background: url('__HOME_IMG__/admin/red-All.png');
+      background-size: cover;
+    }
+    .all {
+      background: url('__HOME_IMG__/admin/all.png');
+      background-size: cover;
+    }
+  </style>
+</block>
+<block name="main">
+  <div class="container">
+    <!-- <div class="card">
+      <div class="content successA">
+        <p>A服务</p>
+        <p>成功订单：</p>
+        <p class="number">{$successA}</p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="content failureA">
+        <p>A服务</p>
+        <p>超时订单：</p>
+        <p class="number">{$failureA}</p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="content all">
+        <p>A服务</p>
+        <p>订单总量：</p>
+        <p class="number">{$successA+$failureA}</p>
+      </div>
+    </div>
+    <br>
+    <div class="card">
+      <div class="content successB">
+        <p>B服务</p>
+        <p>成功订单：</p>
+        <p class="number">{$successB}</p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="content failureB">
+        <p>B服务</p>
+        <p>超时订单：</p>
+        <p class="number">{$failureB}</p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="content all">
+        <p>B服务</p>
+        <p>订单总量：</p>
+        <p class="number">{$successB+$failureB}</p>
+      </div>
+    </div>
+    <br>
+    <div class="card">
+      <div class="content successAll">
+        <p>总</p>
+        <p>成功订单：</p>
+        <p class="number">{$successA+$successB}</p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="content failureAll">
+        <p>总</p>
+        <p>超时订单：</p>
+        <p class="number">{$failureA+$failureB}</p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="content all">
+        <p>总订单量：</p>
+        <p>&nbsp;</p>
+        <p class="number">{$successA+$successB+$failureA+$failureB}</p>
+      </div>
+    </div> -->
+    <div class="card">
+      <div class="content successAll">
+        <p>普通订单</p>
+        <p>A状态：</p>
+        <p class="number">{$info['A']}</p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="content successAll">
+        <p>普通订单</p>
+        <p>B状态：</p>
+        <p class="number">{$info['B']}</p>
+      </div>
+    </div>
+    <br/>
+    <div class="card">
+      <div class="content all">
+        <p>普通订单</p>
+        <p>D状态：</p>
+        <p class="number">{$info['D']}</p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="content failureAll">
+        <p>普通订单</p>
+        <p>G状态：</p>
+        <p class="number">{$info['G']}</p>
+      </div>
+    </div>
+    
+  </div>
+</block>
+
+<block name="script">
+  <script type="text/javascript">
+    $(function(){
+      
+    });
+  </script>
+</block>

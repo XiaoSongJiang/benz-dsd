@@ -1,0 +1,75 @@
+<extend name="_Layout/main"/>
+
+<block name="title"><title>{$meta_title}</title></block>
+
+<block name="style">
+  <style type="text/css">
+    body {
+      width: 100%;
+      background: url(__HOME_IMG__/icon/message-bg.png);
+      background-size: cover;
+      background-repeat: no-repeat;
+    }
+    img {
+      width: 100%;
+    }
+    
+    .qrcode-error {
+      width: 40%;
+      margin-top: 40%;
+    }
+    .qrcode-return {
+      width: 45%;
+      margin-top: 20px;
+    }
+
+    .to-life {
+      position: absolute;
+      width: 200px;
+      bottom: 30px;
+    }
+    @media (max-width: 320px) {
+      .message {
+        margin-top: 140px;
+      }
+    }
+    
+  </style>
+</block>
+
+<block name="main">
+  
+  <div class="top">
+    <img src="__HOME_IMG__/icon/logo.png" alt="">
+  </div>
+  <div class="main">
+    <p>
+      <img class="qrcode-error" src="__HOME_IMG__/dos/qrcode_error.png" alt="">
+    </p>
+    <p>
+      <img class="qrcode-return" src="__HOME_IMG__/dos/qrcode_return.png" alt="">
+    </p>
+  </div>
+  <center class="to-life">
+    <img src="__HOME_IMG__/icon/to-life.png" alt="">
+  </center>
+  
+</block>
+
+<block name="script">
+  <script type="text/javascript">
+    $(function(){
+      width = $(window).width();
+      $(".to-life").css('left',(width-$(".to-life").width())/2);
+
+      $(".qrcode-return").click(function() {
+        window.location.href = "<?php echo U('index'); ?>";
+      });
+    });
+  </script>
+</block>
+
+
+
+
+

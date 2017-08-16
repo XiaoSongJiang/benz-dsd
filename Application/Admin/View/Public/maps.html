@@ -1,0 +1,93 @@
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <style type="text/css">
+    html {
+      height: 100%
+    }
+    body {
+      height: 100%;
+      margin: 0px;
+      padding: 0px;
+    }
+  </style>
+
+  <!-- <script type="text/javascript" src="http://ditu.google.cn/maps/api/js?sensor=false&hl=zh-CN"></script> -->
+  <!-- // <script type="text/javascript" src="http://ditu.google.cn/maps?file=api&hl=zh-CN&v=2.s&key=AIzaSyAHQkKWpg7c6_7BhyTR6aOPYMFXE3_JWRA"></script>   -->
+  <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyAHQkKWpg7c6_7BhyTR6aOPYMFXE3_JWRA&sensor=false">
+  
+  <script type="text/javascript">
+    var option = {                //中心点坐标
+      MapLng: 39.9925181,
+      MapLat: 116.33929039999998,
+      zoom: 15,                 //加载放大多少
+      szoom: 15  			//搜索放大多少
+    };
+    var map;
+    var lanlngs = new google.maps.LatLng(option.MapLng, option.MapLat);
+    var info;
+    var markers = [];
+    var geocoder = new google.maps.Geocoder();  //搜索用
+    var marker;
+
+    function initialize() {
+      var options = {
+        zoom: option.zoom,
+        center: lanlngs,
+        mapTypeId: google.maps.MapTypeId.ROADMAP,
+        title: "选为地址"
+      }
+      map = new google.maps.Map(document.getElementById('map'), options);
+      google.maps.event.addListener(map, 'click', function (event) {    //监听点击事件
+        addMarker(event.latLng);
+        document.getElementById('j').innerHTML = info;
+      });
+      addMarker(lanlngs);
+    }
+
+    function addMarker(location) {
+      for (i in markers) {
+        markers[i].setMap(null);
+      }
+      marker = new google.maps.Marker({
+        position: location,
+        map: map,
+        draggable: true,
+        icon: 'user.png'
+      });
+      google.maps.event.addListener(marker, 'dragend', function (event) {    //监听点击事件
+        document.getElementById('j').innerHTML = event.latLng;
+      });
+      var center = marker.getPosition();
+      markers.push(marker);
+      info = marker.getPosition();
+    }
+
+    //搜索地址方法
+    function searchAddress() {
+      var address = document.getElementById('address').value;
+      geocoder.geocode({
+        'address': address //"格式可以是不分割的：北京市东城区东直门，或北京市,东城区,东直门"
+      }, function (results, status) {
+        console.log('search result', results, status);
+        if (status == google.maps.GeocoderStatus.OK) {
+          lanlngs = results[0].geometry.location;
+          option.zoom = option.szoom;
+          initialize();   //搜索后再次加载地图，重新定位
+          addMarker(lanlngs);
+          //results数组里有很多有用的信息，包括坐标和返回的标准位置信息
+        } else {
+          alert(interGeoAnalysisFailed);
+        }
+      });
+    }
+  </script>
+</head>
+<body onload="initialize();">
+  <div id="map" style="width: 600px; height: 400px;"></div>
+  <div>
+    <div id="conteng">你选择的经纬度为：<span id="j">(39.9925181, 116.33929039999998)</span></div>
+    <input type="text" name="address" id="address" />
+    <input type="button" onclick="searchAddress();" value="搜索" />
+  </div>
+</html>

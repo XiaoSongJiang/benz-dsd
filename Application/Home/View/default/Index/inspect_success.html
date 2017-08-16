@@ -1,0 +1,45 @@
+<extend name="_Layout/main"/>
+
+<block name="title"><title>{$meta_title}</title></block>
+
+<block name="style">
+  <style type="text/css">
+    body {
+      background-color: #eff1f3;
+    }
+    p {
+      text-align: center;
+      margin-top: 60px;
+    }
+    .image {
+      margin-top: 35%;
+    }
+    .success{
+      font-size: 40px;
+      margin-top: 80px;
+      margin-left: 20px;
+    }
+    .time {
+      font-size: 32px;
+      margin-top: 50px;
+    }
+    
+  </style>
+</block>
+
+<block name="main">
+  <p class="image"><img src="__HOME_IMG__/new/inspect.png"></p>
+  <p class="success">{$title}</p>
+  <p class="time">{$info} {$time}</p>
+</block>
+
+<block name="script">
+  <script type="text/javascript">
+    
+  </script>
+</block>
+
+
+
+
+

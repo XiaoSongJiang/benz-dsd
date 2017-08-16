@@ -1,0 +1,69 @@
+{
+"button":[
+	{
+		"name":"最新活动",
+		"sub_button":[
+            {
+            "type": "view",
+            "name": "新年许愿",
+            "url": "http://www.rwcamp.com/mercedes_benz/ases?smt_cp=express-servicesmt_md=wechatsmt_pl=mercedesme"
+            },
+            {
+            "type": "view",
+            "name": "新春团圆季",
+            "url": "http://mp.weixin.qq.com/s?__biz=MzI2MjA1MTg0OA==mid=401365394idx=1sn=e106db43c24f5dac2e1a0b9241afc2b2scene=0#wechat_redirect"
+            },
+            {
+            "type": "view",
+            "name": "快修专享服务发布",
+            "url": "http://mp.weixin.qq.com/s?__biz=MzI2MjA1MTg0OA==mid=400945236idx=1sn=4103d1e1a45c7d792bf4112c50768254scene=0#wechat_redirect"
+            },
+			{
+			"type": "view",
+			"name": "续保有礼",
+			"url": "http://mp.weixin.qq.com/s?__biz=MzI2MjA1MTg0OA==mid=401139257idx=2sn=d2f347cf32813f7f8678b77d258379cdscene=4#wechat_redirect"
+			}
+		]
+	},
+	{
+		"name":"我的服务",
+        "sub_button":[
+        	{	
+        		"type":"media_id",
+        	    "name":"终身免费事故救援",
+        	    "media_id":"TbPJq7CVsbKcVIv2SUoCS7SLbAJVk_II_kBuCR0Y9K0"
+        	},
+        	{
+        	    "type":"media_id",
+        	    "name":"星徽保养菜单",
+        	    "media_id":"HUJq3eSDbkutFFHs71cuUsWhCJWteMwKaoLaN-97ztk"
+        	},
+        	{
+        	    "type":"media_id",
+        	    "name":"修养套餐",
+        	    "media_id":"TbPJq7CVsbKcVIv2SUoCS5LK_RzGNtVJSQIUl19--xA"
+        	},
+        	{	
+        		"type":"media_id",
+        	    "name":"原厂配件",
+        	    "media_id":"JK9vNn8lHBWwLIxxCWA1wxpEcOj8wdmKO049MHsDxXE"
+        	}
+        ]
+	},
+	{
+		"name":"快修专享",
+        "sub_button":[
+            {   
+                "type":"media_id",
+                "name":"快修专享服务介绍",
+                "media_id":"mSeY5UaKfto9Z4hK8umL-A7roTEE9pYYJySwErwaT1Y"
+            },
+        	{
+            	"type":"view",
+            	"name":"快修计时器",
+            	"url":"https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxa7b4196bf56f7c81&redirect_uri=http://estimer.mercedes-benz.com.cn&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect"
+        	}
+        ]
+	}
+]
+}

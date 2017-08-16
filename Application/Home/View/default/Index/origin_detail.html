@@ -1,0 +1,174 @@
+<extend name="_Layout/main"/>
+
+<block name="title"><title>{$meta_title}</title></block>
+
+<block name="style">
+  <style type="text/css">
+    body {
+      width: 100%;
+      background: url(__HOME_IMG__/icon/message-bg.png);
+      background-size: cover;
+      background-repeat: no-repeat;
+    }
+    img {
+      width: 100%;
+    }
+    .detail {
+      width: 85%;
+      margin: 0 auto;
+      margin-top: 15px;
+      border-color: black;
+    }
+    .detail th ,.detail td{
+      text-align: center;
+      padding: 8px 5px;
+      border: 1px solid #949494;
+      /*font-size: 12px;*/
+    }
+    .detail th {
+      background-color: #ebebeb;
+    }
+
+    ul {
+      list-style: none;
+    }
+    /*维修状态*/
+    .status {
+      margin-top: -10px;
+      clear: both;
+    }
+    .status .left {
+      width: 15%;
+      float: left;
+      margin-left: 20px;
+      padding: 0;
+    }
+    .left-list {
+      border-left: 5px solid #949494;
+      margin-left: 25px;
+    }
+    .left-list .item {
+      margin-top: 40px;
+      width: 15px;
+      height: 15px;
+      border-radius: 50%;
+      background-color: #949494;
+      box-shadow: 0px 0px 0px 3px white;
+      margin-left: -50px;
+    }
+    .left-list .item.active{
+      background-color: #26714a;
+      box-shadow: 0px 0px 0px 3px white, 0px 0px 0px 5px #26714a;
+    }
+    .status .right {
+      width: 70%;
+      float: left;
+    }
+    .right-list {
+      padding: 0;
+      margin-top: 25px;
+    }
+    .right-list .item {
+      height: 50px;
+      width: 100%;
+    }
+    .right-list .item.active {
+      color: #26714a;
+    }
+    .right-list .item img{
+      width: 30px;
+      height: 30px;
+      padding: 12px 0;
+    }
+    .right-list .item span {
+      padding-left: 10px;
+      vertical-align: middle;
+    }
+    .qrcode-desc center {
+      font-size: 10px;
+    }
+    .bottom {
+      border-bottom: 3px solid #949494;
+    }
+
+    @media (max-width: 320px) {
+      .detail {
+        margin-top: 20px;
+      }
+    }
+
+  </style>
+</block>
+
+<block name="main">
+
+  <div class="top">
+    <img src="__HOME_IMG__/icon/logo.png" alt="">
+  </div>
+  <div class="main">
+    <table class="detail table table-striped table-bordered">
+      <tr>
+        <th>服务经销商</th>
+        <td>{$dealer.dealer_short}</td>
+      </tr>
+      <tr>
+        <th>工单号</th>
+        <td>{$log.wip}</td>
+      </tr>
+      <tr>
+        <th>开始时间</th>
+        <td>{$log.start_timestamp|date='Y-m-d H:i:s',###}</td>
+      </tr>
+      <tr>
+        <th>预计取车时间</th>
+        <td>{$log.taking_time}</td>
+      </tr>
+      <tr>
+        <th>维修顾问</th>
+        <td>{$sa_name}</td>
+      </tr>
+    </table>
+    <div class="status">
+      <div class="left">
+        <ul class="left-list">
+          <foreach name="list" item="item">
+          <li class="{$item['class']}"></li>
+          </foreach>
+        </ul>
+      </div>
+      <div class="right">
+        <ul class="right-list">
+          <foreach name="list" item="item">
+          <li class="{$item.detail_class}">
+            <img src="__HOME_IMG__/dos/{$item.img}.png" alt="">
+            <span style="display: inline-block;margin-bottom: 50px;">{$item.title}</span>
+            <span style="float:right;padding-top:15px;">{$item.reneval_time}</span>
+          </li>
+          </foreach>
+        </ul>
+      </div>
+    </div>
+    <div class="qrcode" style="width:85%;margin:0 auto;">
+      <div class="qrcode-img" style="float:left;width:25%;">
+        <img src="__HOME_IMG__/dos/二维码.png" style="width:100%;height:100%;">
+      </div>
+      <div class="qrcode-desc" style="float:left;width:75%;padding:0 10px;box-sizing:border-box;">
+        <img src="__HOME_IMG__/dos/文字.jpg" style="height:35px;width:100%;border-bottom:1px solid #797979;margin-bottom:5px;">
+        <center>为了便于您及时了解车辆维修状态</center>
+        <center>建议长按二维码关注梅赛德斯-奔驰客户服务官方微信</center>
+      </div>
+    </div>
+  </div>
+  
+</block>
+
+<block name="script">
+  <script type="text/javascript">
+    
+  </script>
+</block>
+
+
+
+
+

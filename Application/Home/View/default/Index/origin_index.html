@@ -1,0 +1,149 @@
+<extend name="_Layout/main"/>
+
+<block name="title"><title>{$meta_title}</title></block>
+
+
+<block name="style">
+  <style type="text/css">
+    .main {
+      margin-top: 10%;
+    }
+    .service {
+      margin-top: 15%;
+    }
+
+    .index-title {
+      width: 65%;
+      margin-top: 15px;
+    }
+    .tips {
+      width: 87.5%;
+      margin-top: 35px;
+    }
+    .service input {
+      width: 87.5%;
+      font-size: 16px;
+      margin: 2% 0;
+      margin-left: 4%;
+      padding: 5px 5px;
+      box-sizing: content-box;
+      background-color: #e4e4e4;
+      border: 1px solid #ccc;
+    }
+    .btn-confirm {
+      margin-bottom: 15px;
+    }
+    .suggest{
+      width: 65%;
+      margin-top: 5px;
+    }
+
+    /* S5 适配 */
+    @media (max-width: 320px) { 
+
+      .tips {
+        width: 280px;
+      }
+      .btn-confirm {
+        width: 66%;
+        height: 40px;
+        margin-left: 17%;
+        margin-top: 8px;
+        font-size: 18px;
+      }
+    }
+  </style>
+</block>
+
+<block name="main">
+
+  <div class="top">
+    <img src="__HOME_IMG__/icon/logo.png" alt="">
+  </div>
+  <form id="form" action="<?php echo U('detail'); ?>" method="post">
+    <div class="main">
+
+      <div class="service">
+        <p>
+          <img class="index-title" src="__HOME_IMG__/dos/index_title.png" alt="">
+        </p>
+        <p>
+          <img class="tips" src="__HOME_IMG__/dos/input.png" alt="">
+        </p>
+        <input id="wip" name="wip" class="input" type="text">
+        <input id="type" name="type" type="hidden" value="N">
+      </div>
+      <input class="btn btn-ok btn-confirm" type="button" value="查看服务详情">
+      <p>
+        <img class="suggest" src="__HOME_IMG__/dos/dos_suggest.png" alt="">
+      </p>
+    </div>
+  </form>
+
+</block>
+
+<block name="script">
+
+  <script language=”JavaScript”>
+    javascript:window.history.forward(1);
+  </script>
+  <script type="text/javascript">
+
+    $(function(){
+
+      var service_type = 0;
+
+            // click handler
+            $(".type").each(function(index) {
+             $(this).click(function() {
+              if(service_type == index){
+                return;
+              }else {
+                service_type = index;
+              }
+              $(this).toggleClass('active').siblings('.type').toggleClass('active');
+              $("#type").val(service_type?'B':'A');
+              $(".service-type").html(service_type?'B':'A');
+              $(".service-time").html(service_type?'90':'60');
+            }); 
+           });
+
+            $(document).keydown(function (event) {
+              var key = event.keyCode | event;
+              if (key == 13) {
+                return false;
+              };
+            });
+
+            $(".btn-confirm").click(function() {
+              var redirect = "<?php echo U('service'); ?>";
+              var wip = $("#wip").val();
+              if(wip.length != 7) {
+                benz.ui.alert('您输入的服务单号有误，请联系服务顾问!');
+                return false;
+              }
+              var url = "<?php echo U('Home/Common/ajaxCheckNormal') ?>"
+              var param = {
+                wip: wip
+              }
+              $.ajax({
+                url: url,
+                data: param,
+              })
+              .done(function(res) {
+                if(res.status == 1) {
+                  $("#form").submit();
+                }else{
+                  benz.ui.alert('您输入的服务单号有误，请联系服务顾问!');
+                  return false;
+                }
+              })
+            });
+          });
+</script>
+</block>
+
+
+
+
+

@@ -1,0 +1,33 @@
+<extend name="_Layout/main"/>
+
+<block name="title"><title>{$meta_title}</title></block>
+
+<block name="style">
+  <style type="text/css">
+    .background {
+      width: 100%;
+      height: 100%;
+    }
+    body {
+    	/*background: url('__HOME_IMG__/new/empty.png?v=1');*/
+    }
+  </style>
+</block>
+
+<block name="main">
+  <img class="background" src="__HOME_IMG__/new/empty.png?v=1" alt="">
+</block>
+
+<block name="script">
+  <script type="text/javascript">
+    $(function() {
+    	var wh = $(window).height()
+    	$('.background').css('height', wh + 'px');
+    })
+  </script>
+</block>
+
+
+
+
+

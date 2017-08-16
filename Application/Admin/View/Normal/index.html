@@ -1,0 +1,672 @@
+<extend name="_Layout/main" />
+<block name="style">
+  <style type="text/css">
+    .display {
+      margin-top: 20px;
+    }
+
+    .disabled {
+      background-color: #c5c5c5
+    }
+
+    .type select {
+      width: 100px;
+    }
+  </style>
+  <link rel="stylesheet" href="__PUBLIC__/js/jquery-ui-timepicker-addon.min.css">
+  <link href="__PUBLIC__/css/jquery-ui.css" rel="stylesheet">
+  <link rel="stylesheet" href="__PUBLIC__/css/order.css?v=__PUBLIC_VERSION__">
+
+</block>
+
+<block name="main">
+  <!-- <div class="container"> -->
+  <!-- 编辑详情页面 -->
+  <div class="list-filter">
+    <foreach name="urls" item="item">
+      <a href="{$item.url}" class="{$item.class}">{$item.name}</a>
+    </foreach>
+  </div>
+  <if condition="$statistics eq 'statistics'">
+    <span class="min-data">数据统计</span>
+  </if>
+
+  <div class="top">
+    <form action="<?php echo U('index', ['type' => $type]); ?>" class="form-inline" method="post">
+      <div class="setting">
+        <div class="filter clearfix" style="float:left;margin-bottom:10px;">
+          <div class="type">
+            <select name="dateFilterType" id="dateFilterType">
+              <option value="check_in" <?php if($dateFilterType == 'check_in') echo 'selected'; ?>>登记进厂时间</option>
+              <option value="start_timestamp" <?php if($dateFilterType == 'start_timestamp') echo 'selected'; ?>>创建工单时间</option>
+            </select>
+          </div>
+          <div class="range">
+            <input type="text" id="from" placeholder="开始日期" name="start_date" value="{$start_date}"> &nbsp;至&nbsp;
+            <input type="text" id="to" placeholder="结束日期" name="end_date" value="{$end_date}" >
+          </div>
+          <!--SA筛选-->
+          <if condition="$usertype neq 6">
+            <div class="type">
+              <select name="sa_uid">
+              <option value="">全部SA</option>
+              <foreach name="sales_list" item="sa">
+              <option value="{$sa.id}" <?php if($sa_uid == $sa['id']) echo 'selected' ?>>{$sa.nickname}</option>
+              </foreach>
+            </select>
+            </div>
+          </if>
+          <if condition="$type neq 'finished'">
+            <div class="type">
+              <select name="log_status" id="logStatus">
+              <option value="">全部状态</option>
+              <option value="empty" <?php if($log_status == 'empty') echo 'selected'; ?>>等待进厂</option>
+              <option value="A" <?php if(A==$log_status) echo 'selected'; ?>>登记进厂</option>
+              <option value="A0" <?php if(A0==$log_status) echo 'selected'; ?>>未派单</option>
+              <option value="A1" <?php if(A1==$log_status) echo 'selected'; ?>>已派单</option>
+              <option value="B" <?php if(B==$log_status) echo 'selected'; ?>>已开钟</option>
+              <option value="D" <?php if(D==$log_status) echo 'selected'; ?>>已关钟</option>
+              <option value="D1" <?php if(D1==$log_status) echo 'selected'; ?>>已交单</option>
+              <option value="F" <?php if(F==$log_status) echo 'selected'; ?>>终检开始</option>
+              <option value="G" <?php if(G==$log_status) echo 'selected'; ?>>准备交车</option>
+              <!-- <option value="I" <?php if(I==$log_status) echo 'selected'; ?>>已结账</option> -->
+            </select>
+            </div>
+          </if>
+          <div class="type">
+            <select name="reserve_status">
+              <option value="">全部用户</option>
+              <option value="yes" <?php if('yes'==$reserve_status) echo 'selected'; ?>>预约用户</option>
+              <option value="not" <?php if('not'==$reserve_status) echo 'selected'; ?>>非预约用户</option>
+            </select>
+          </div>
+          <!--用户筛选-->
+          <div class="type">
+            <select name="weixin">
+              <option value="">全部用户</option>
+              <option value="bind" <?php if($weixin == 'bind') echo 'selected'; ?>>已绑定微信</option>
+              <option value="unbind" <?php if($weixin == 'unbind') echo 'selected'; ?>>未绑定微信</option>
+            </select>
+          </div>
+
+        </div>
+        <div class="fr" style="float:left;margin-bottom:10px;">
+          <input style="width: 120px;padding-left: 5px;background-color: #fff;border-radius: 2px;border: 1px solid #999999;height: 30px;"
+            type="search" placeholder="请输入关键词" name="keyword" value="{$keyword}">
+          <span class="search btn-search">搜索</span>
+          <span class="reset">重置</span>
+          <span class="export btn-export">导出</span>
+        </div>
+      </div>
+      <input type="hidden" name="p">
+      <input type="hidden" name="export">
+    </form>
+  </div>
+
+  <div class="display table-wrap">
+    <table class="table table-bordered table-striped">
+      <tr>
+        <th>WIP单号</th>
+        <th>车牌号</th>
+        <th>创建工单时间<a href="{:U('',array('order_type'=>'start_timestamp','sort'=>$sort))}"><img src="__PUBLIC__/images/sort.png" style="margin-left: 20px;"></a></th>
+        <th>登记进厂时间<a href="{:U('',array('order_type'=>'check_in','sort'=>$sort))}"><img src="__PUBLIC__/images/sort.png" style="margin-left: 20px;"></a></th>
+        <th>客户要求时间</th>
+        <th>负责的SA</th>
+        <th>是否超时</th>
+        <th>当前状态</th>
+        <th>操作</th>
+      </tr>
+      <foreach name="list" item="item">
+        <tr data-id="{$item.log_id}">
+          <td class="reserve {$item.bind}">{$item.wip}</td>
+          <td>{$item.registration_no}</td>
+          <td>{$item.start_timestamp|date='Y-m-d H:i:s',###}</td>
+          <td>
+            <?php echo get_value($item['check_in'], 'time', ''); ?>
+          </td>
+          <td>
+            <?php echo get_value($item['taking_time'], 'time', '——'); ?>
+          </td>
+          <td>{$item.sa}</td>
+          <!-- 超时状态 -->
+          <if condition="$item.timeout eq true">
+            <td class="overtime">是</td>
+            <else />
+            <td>否</td>
+          </if>
+          <td class="status" style="{$item.normal_status|getNormalStatusClass}">
+          	
+            <img src="__PUBLIC__/images/{$item.normal_status|getNormalStatusImg}" style="vertical-align: middle;width: 18px;height: 18px;">
+            <span style="vertical-align: middle;">{$item.normal_status|getNormalStatus}</span></td>
+          <td class="operation" style="width:200px;">
+            <!-- 调度角色不查看详情 -->
+            <if condition="$usertype neq 10 or $type eq 'finished'">
+              <span class="more" data-id="{$item.log_id}">查看详情</span>
+            </if>
+            <if condition="$item['editable'] eq true">
+              <span class="edit" data-id="{$item.log_id}">编辑</span>
+            </if>
+            <if condition="$item['openid']">
+              <span class="unbundling" data-log="{$item.log_id}" data-url="<?php echo U('unbind',array('id'=>$item['log_id'])); ?>">解绑微信</span>
+              <else />
+              <span class="disabled">解绑微信</span>
+            </if>
+          </td>
+        </tr>
+      </foreach>
+    </table>
+    <div class="table-tips">显示{$first}-{$last}条，共{$count}条</div>
+    <div class="pagination">
+      <span class="prev">前一页</span>
+      <foreach name="page" item="item">
+        <a href="#" class="{$item.class}">{$item.name}</a>
+      </foreach>
+      <span class="next">后一页</span>
+    </div>
+  </div>
+
+  <!-- </div> -->
+
+</block>
+
+<block name="script">
+
+  <script src="__PUBLIC__/js/jquery-ui.js"></script>
+  <script src="__PUBLIC__/js/jquery-ui-timepicker-addon.js"></script>
+  <script type="text/javascript">
+    $(function () {
+
+      $('.modal-bg').height($(document).height());
+
+      // 用户权限类型
+      var usertype = "<?php echo $usertype; ?>"
+
+      // 查看详情 设置disabled
+      var modifiedFields = ['reserve_status', 'reserve_type', 'dispatch_time', 'complete_time', 'work_type',
+        'log_desc', 'final_start_time', 'final_end_time', 'wash_start_time', 'wash_end_time', 'log_type',
+        'handover_time'
+      ];
+
+      // 设置可修改权限
+      var auth = {
+        1: modifiedFields,
+        6: ['handover_time'],
+        10: ['reserve_status', 'reserve_type', 'dispatch_time', 'complete_time', 'work_type', 'log_desc',
+          'final_start_time', 'final_end_time', 'wash_start_time', 'wash_end_time', 'log_type'
+        ],
+        12: ['final_start_time', 'final_end_time'],
+        16: ['wash_start_time', 'wash_end_time']
+      }
+
+      var lists = <?php 
+        $times = ['taking_time', 'check_in', 'start_timestamp','a_time','b_time','d_time', 'g_time', 'dispatch_time','complete_time','final_start_time', 'final_end_time', 'wash_start_time', 'wash_end_time', 'handover_time'];
+        foreach($list as &$item) {
+          foreach($times as $time) {
+            $item[$time] = get_value($item[$time],'time','');
+          }
+        }
+        echo json_encode($list);
+       ?>;
+
+      // 获取当前列中的数据
+      function getData($dom) {
+        var id = $dom.data('id')
+        var order = {}
+        for (var i = 0; i < lists.length; i++) {
+          var item = lists[i];
+          if (item.log_id == id) {
+            order = item;
+            break;
+          }
+        }
+        return order || {}
+      }
+
+      // 获取并设置数据到modal上
+      function setLogData($dom, type) {
+        var order = getData($dom)
+        console.log(order)
+        $(".list-modal .wip").html(order.wip)
+        $(".list-modal .taking-time").html(order.taking_time)
+        $(".list-modal input").each(function () {
+          var key = $(this).data('name')
+          if (key) {
+            $(this).val(order[key])
+          }
+        })
+        $(".list-modal select").each(function () {
+          var key = $(this).data('name')
+          if (key) {
+            order[key] = order[key] || ''
+            $(this).val(order[key])
+          }
+        })
+        // 说明
+        $(".list-modal .order-desc").val(order.log_desc)
+
+        var allowed = auth[usertype] || [];
+
+        modifiedFields.forEach(function (item) {
+          if (type == 'info') {
+            $("#" + item).attr('disabled', 'disabled');
+          } else {
+            if (allowed.indexOf(item) != -1) {
+              $("#" + item).removeAttr('disabled');
+              $("#" + item).parent('.form-group').addClass('editable');
+            } else {
+              $("#" + item).attr('disabled', 'disabled');
+              $("#" + item).parent('.form-group').removeClass('editable');
+            }
+          }
+        });
+
+      }
+
+      // 根据点击类型，显示对应可显示按钮
+      function showModalButton(type) {
+        if (type == 'info') {
+          $(".modal-footer .save").hide();
+          $(".modal-footer .cancel").hide();
+          $(".modal-footer .close").show();
+        } else {
+          $(".modal-footer .save").show();
+          $(".modal-footer .cancel").show();
+          $(".modal-footer .close").hide();
+        }
+      }
+
+      // 编辑信息
+      $('.operation .edit').click(function () {
+        setLogData($(this))
+        $('.list-modal').show();
+        $('.modal-bg').show();
+        showModalButton('edit');
+      });
+
+      // 查看信息
+      $('.operation .more').click(function () {
+        setLogData($(this), 'info')
+        $('.list-modal').show();
+        $('.modal-bg').show();
+        showModalButton('info');
+      })
+
+
+      // 保存基本信息
+      $('.list-modal .save').click(function () {
+        updateLogInfo() // 执行保存数据
+      });
+
+      // Ajax 保存订单信息
+      function updateLogInfo() {
+    	
+        var auth_fields = auth[usertype] || []
+        var allowed = []
+        auth_fields.forEach(function (item) {
+          allowed.push(item)
+        })
+        allowed.push('log_id')
+
+        var temporary = ['a_time', 'b_time', 'd_time', 'g_time', 'normal_status'];
+        var all = auth['1']
+        all.forEach(function (item) {
+          if(auth_fields.indexOf(item) == -1) {
+            temporary.push(item)
+          }
+        });
+
+        temporary.forEach(function (time) {
+          allowed.push(time)
+        });
+
+        var data = {}
+        allowed.forEach(function (field) {
+          data[field] = $("#" + field).val()
+        })
+
+        var judge = checkTimeLogic(data) || {}
+        var wrong = false
+
+        if (!judge.status) {
+          $('.modal-wrap').hide()
+          $('.save-failure-modal .tips').html(judge.message)
+          $('.save-failure-modal').show()
+          wrong = true
+        }
+
+        temporary.forEach(function (time) {
+          delete data[time]
+        });
+
+        if (wrong) {
+          return false
+        }
+
+        // 关闭弹窗
+        $('.modal-wrap').hide();
+
+        console.log('update data', data)
+        $.ajax({
+          'url': "<?php echo U('modify') ?>",
+          'data': data,
+          'method': 'POST'
+        }).done(function (res) {
+          // 修改lists中数据
+          lists.map(function (item) {
+            if (item['log_id'] == data['log_id']) {
+              for (var key in data) {
+                item[key] = data[key]
+              }
+            }
+            return item
+          })
+          $("tr").each(function () {
+            // 修改预约状态标识
+            if ($(this).data('id') == data['log_id']) {
+              if (data['reserve_status']) {
+                $(this).find('.reserve').addClass('bind')
+              } else {
+                $(this).find('.reserve').removeClass('bind')
+              }
+              // 修改当前状态
+              // var status = getTemporaryStatus(res.info)
+              var status = res.info['normal_status'];
+              if (status) {
+                // 修改颜色
+                var $td = $(this).find('.status')
+                $td.css('color', getNormalStatusColor(status))
+                // 修改图片
+                var $image = $td.find('img')
+                $image.attr('src', getNormalStatusImg(status))
+                //alert(getNormalStatusImg(status));
+                // 修改文字
+                var $span = $td.find('span')
+                $span.html(getNormalStatus(status))
+              }
+            }
+          })
+
+          return true
+        })
+
+        $('.save-success-modal').show();
+      }
+
+      // 解绑微信操作
+      $('.unbundling').click(function () {
+        $('.weixin-modal').show()
+        $('.modal-bg').show()
+        var url = $(this).data('url')
+        $('.weixin-modal .save').data('url', url)
+      });
+
+      // 微信解绑确认事件
+      $('.weixin-modal .save').click(function () {
+        var url = $(this).data('url')
+        $.ajax({
+          'url': url
+        }).done(function (res) {
+          var log_id = res['info']
+          unbindWeixinUI(log_id)
+        })
+        $('.modal-wrap').hide();
+        $('.modal-bg').hide();
+        // $('.save-success-modal').show();        
+      });
+
+      // 取消绑定微信后界面修改
+      function unbindWeixinUI(id) {
+        $("tr").each(function () {
+          if ($(this).data('id') == id) {
+            // $(this).find('.bind').removeClass('bind')
+            $(this).find('.unbundling').removeClass('unbundling').addClass('disabled');
+          }
+        })
+      }
+
+      // 打开数据统计弹窗
+      $('.min-data').click(function () {
+        $('.data-modal').show();
+        $('.modal-bg').show();
+      });
+
+      // 关闭取消事件
+      $('.close').click(function () {
+        $('.modal-wrap').hide();
+        $('.modal-bg').hide();
+      });
+
+      // 取消
+      $('.cancel').click(function () {
+        $('.modal-wrap').hide();
+        $('.modal-bg').hide();
+      });
+
+      // 时间筛选逻辑
+      $("#dateFilter").change(function () {
+        var filter = $(this).val()
+        if (filter) {
+          $("#from").attr('disabled', 'disabled');
+          $("#to").attr('disabled', 'disabled');
+        } else {
+          $("#from").removeAttr('disabled');
+          $("#to").removeAttr('disabled');
+        }
+      })
+
+      // 初始化时间控件
+      var widgets = ["#dispatch_time", "#complete_time", "#final_start_time", "#final_end_time", "#wash_start_time",
+        "#wash_end_time", '#handover_time'
+      ];
+      widgets.forEach(function (id) {
+        $(id).datetimepicker({
+          showSecond: true,
+          timeFormat: 'hh:mm:ss',
+          dateFormat: 'yy-mm-dd',
+          changeMonth: true,
+          changeYear: true,
+          timeInput: true,
+          onClose: function (selectedDate) {
+            // $(id).datetimepicker( "option", "minDate", selectedDate );
+          },
+          currentText: '当前时间',
+          showTime: false,
+        });
+      })
+
+      // 点击当前时间，设置前面控件的时间为当前时间
+      $('.current-time').each(function () {
+        $(this).click(function () {
+          var current = formatDate('yyyy-MM-dd hh:mm:ss')
+          $(this).prev('input').val(current)
+        })
+      })
+
+      // 列表筛选时间控件
+      var widgets = ['#from', '#to'];
+      widgets.forEach(function (id) {
+        $(id).datepicker({
+          dateFormat: 'yy-mm-dd',
+          changeMonth: true,
+          changeYear: true,
+        });
+      })
+
+      // 重置
+      var filter = {
+        'from': $("#from").val(),
+        'to': $("#to").val()
+      }
+      $('.reset').click(function () {
+        $(".type input").each(function () {
+          $(this).val('');
+        })
+        $(".type select").each(function () {
+          $(this).val('');
+        })
+        $("#from").val(filter.from)
+        $("#to").val(filter.to)
+      })
+
+      var row = {}
+
+      function edit($dom) {
+        // 遍历可编辑组件
+        $dom.closest('tr').children('.editable').each(function () {
+          var name = $(this).attr('name')
+          var value = $(this).html()
+          row[name] = value
+          $input = $('<input>').attr('name', name).val(value)
+          if ($(this).hasClass('time')) {
+            $input.datetimepicker({
+              showSecond: true,
+              timeFormat: 'hh:mm:ss',
+              dateFormat: 'yy-mm-dd',
+              changeMonth: true,
+              changeYear: true
+            });
+          }
+          $(this).html('').append($input)
+        })
+      }
+
+      function cancel_edit($dom) {
+        $dom.closest('tr').children('.editable').each(function () {
+          var name = $(this).attr('name')
+          var value = row[name]
+          $(this).html(value)
+        })
+      }
+
+      function save($dom) {
+
+        var url = "<?php echo U('Admin/Common/ajaxSaveLog'); ?>";
+        var log = {
+          log_id: $dom.attr('log')
+        }
+        $dom.closest('tr').children('.editable').each(function () {
+          var $input = $(this).find('input')
+          var name = $(this).attr('name')
+          var value = $input.val()
+          log[name] = value
+        })
+
+        $.ajax({
+          type: 'POST',
+          url: url,
+          data: log
+        }).done(function (data) {
+          save_end($dom, data.data)
+        })
+      }
+
+      function save_end($dom, data) {
+        $dom.closest('tr').children('.editable').each(function () {
+          var name = $(this).attr('name')
+          var value = data[name]
+          $(this).html('').html(value)
+        })
+        console.log(data)
+        if (data['reserve_status']) {
+          $dom.closest('tr').find('.reserve').addClass('bind')
+        } else {
+          $dom.closest('tr').find('.reserve').removeClass('bind')
+        }
+      }
+
+      // 编辑
+      $(".edit-row").each(function () {
+        $(this).click(function () {
+          edit($(this))
+          $(this).hide().next('.save-row').show().next('.cancel-row').show()
+        })
+      })
+
+      // 保存编辑数据
+      $(".save-row").each(function () {
+        $(this).click(function () {
+          save($(this))
+          $(this).hide().next('.cancel-row').hide()
+          $(this).prev('.edit-row').show()
+        })
+      })
+
+      // 取消
+      $(".cancel-row").each(function () {
+        $(this).click(function () {
+          cancel_edit($(this))
+          $(this).hide().prev('.save-row').hide().prev('.edit-row').show()
+        })
+      })
+
+      // FORM提交判断
+      $('form').submit(function () {
+        // 判断筛选时间范围逻辑
+        var from = new Date($('#from').val()).getTime()
+        var to = new Date($('#to').val()).getTime()
+        if (from > to) {
+          alert('筛选开始时间大于结束时间，请重新设置');
+          return false;
+        }
+      });
+
+
+      // 分页
+      var page_current = parseInt("{$page_current}", 10);
+      var page_total = parseInt("{$page_total}", 10);
+      $(".pagination a").each(function () {
+        $(this).attr('href', 'javascript:void(0)');
+      });
+      $(".pagination .prev").click(function () {
+        if (page_current == 1) {
+          return false;
+        }
+        $('input[name="p"]').val(page_current - 1);
+        $('form').submit();
+      });
+      $(".pagination .num").each(function () {
+        $(this).click(function () {
+          var page = $(this).html();
+          if (page == page_current) {
+            return;
+          } else {
+            $('input[name="p"]').val(page);
+            $('form').submit();
+          }
+        });
+      });
+      $(".pagination .next").click(function () {
+        if (page_current == page_total) {
+          return false;
+        }
+        $('input[name="p"]').val(page_current + 1);
+        $('form').submit();
+      });
+      $(".pagination .first").click(function () {
+        var page = $(this).html();
+        $('input[name="p"]').val(page);
+        $('form').submit();
+      });
+      $(".pagination .end").click(function () {
+        var page = $(this).html();
+        $('input[name="p"]').val(page);
+        $('form').submit();
+      });
+
+      $(".btn-search").click(function () {
+        $('form').submit();
+      });
+
+      $(".btn-submit").click(function () {
+        $('form').submit();
+      });
+
+      $(".btn-export").click(function () {
+        $('input[name="export"]').val('export');
+        $('form').submit();
+        $('input[name="export"]').val('');
+      });
+
+    });
+  </script>
+</block>

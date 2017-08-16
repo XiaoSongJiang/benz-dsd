@@ -1,0 +1,111 @@
+<extend name="_Layout/main"/>
+<block name="style">
+  <style type="text/css">
+    .main-area {
+      background: url("images/code_bg.png") center no-repeat;
+    }
+    .setting .qr {
+      background: url("__PUBLIC__/images/code_bg.png") center no-repeat;
+      text-align: center;
+      height: 300px;
+      height: 600px;
+    }
+    .setting .qr img {
+      margin-top: 20px;
+    }
+    .setting .qr span {
+      font-size: 18px;
+      color: #666;
+      margin-top: 20px;
+      padding-left: 20px;
+      display: block;
+    }
+    .config .item input{
+      margin-right: 2px;
+    }
+    .config .item span{
+      margin-right: 40px;
+    }
+    .sub input{
+      display: inline-block;
+      border-radius: 2px;
+      width: 100px;
+      height: 36px;
+      line-height: 36px;
+      text-align: center;
+      margin-right: 25px;
+      margin-top: 30px;
+      background-color: #2991ea;
+      color: #fff;
+      margin-left: 12px;
+    }
+    .tips {
+      margin: 20px 30px 30px 20px;
+      width: 500px;
+      height: 500px;
+      /*display: none;*/
+    }
+    .tips.dispatch {
+      display: block;
+      background: url("__PUBLIC__/images/tips_dispatch.png") center no-repeat;
+    }
+    .tips.final {
+      display: block;
+      background: url("__PUBLIC__/images/tips_final.png") center no-repeat;
+    }
+  </style>
+  <link rel="stylesheet" href="__PUBLIC__/css/order.css">
+</block>
+<block name="main">
+  <div class="list-filter" style="font-size: 16px;">
+    客户界面设置
+  </div>
+  <div class="setting">
+    <br />
+      <span style="font-size: 15px;">请勾选要在客户界面显示的进度状态：</span>
+    <br />
+    <div style="height: 20px;"></div>
+      <form method="post" action="__SELF__">
+      <input type="hidden" name="type" value="page">
+        <div class="config">
+          <span class="item">
+            <input type="checkbox" name="c_value[]" value="A" checked="true" disabled="true"><span>维修准备</span>
+          </span>
+          <span class="item" data-type="dispatch">
+            <input type="checkbox" name="c_value[]" value="A1" <eq name="A1" value="A1">checked="true"</eq>> <span>调度派单</span>
+          </span>
+          <span class="item">
+            <input type="checkbox" name="c_value[]" value="B" checked="true" disabled="true"> <span>开始维修</span>
+          </span>
+          <span class="item" data-type="final">
+            <input type="checkbox" name="c_value[]" value="F" <eq name="F" value="F">checked="true"</eq>> <span>终检/洗车开始</span>
+          </span>
+          <span class="item">
+            <input type="checkbox" name="c_value[]" value="G" checked="true" disabled="true"> <span>准备交车</span>
+          </span>
+        </div>
+        <div class="tips">
+          
+        </div>
+        <div class="sub">
+          <input type="submit" value="保存">
+        </div>
+      </form>
+  </div>
+</block>
+
+<block name="script">
+  <script>
+    $(function() {
+      $(".config .item").each(function() {
+        $(this).mouseover(function() {
+          var type = $(this).data('type') || ''
+          console.log(type);
+          $('.tips').attr('class', 'tips ' + type)
+        }).mouseout(function() {
+          $('.tips').attr('class', 'tips')
+        })
+      })
+    })
+  </script>
+</block>

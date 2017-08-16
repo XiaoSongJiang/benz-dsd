@@ -1,0 +1,170 @@
+<extend name="_Layout/main"/>
+
+<block name="title"><title>{:C('WEB_SITE_TITLE')}</title></block>
+
+
+<block name="style">
+    <style type="text/css">
+        .main {
+            margin-top: 6%;
+        }
+        .main .title {
+            color: #6d6d6d;
+            font-weight: bold;
+            font-size: 18px;
+            text-align: center;
+        }
+        .main .type {
+            width: 95%;
+            height: 18%;
+            margin-left: 2.5%;
+            margin-top: 3%;
+            width: 300px;
+            height: 100px;
+            border: 3px solid #ccc;
+        }
+        .type-A {
+            background: url(__HOME_IMG__/icon/A.png) no-repeat center;
+            background-size: contain;
+        }
+        .type-A.active {
+            background: url(__HOME_IMG__/icon/A-active.png) no-repeat center;
+            background-size: contain;
+        }
+        .type-B {
+            background: url(__HOME_IMG__/icon/B.png) no-repeat center;
+            background-size: contain;
+        }
+        .type-B.active {
+            background: url(__HOME_IMG__/icon/B-active.png) no-repeat center;
+            background-size: contain;
+        }
+
+        .service {
+            margin-top: 6%;
+        }
+        .service input {
+            width: 90%;
+            font-size: 16px;
+            margin: 2% 0;
+            margin-left: 4%;
+            padding: 5px 5px;
+            box-sizing: content-box;
+            background-color: #e4e4e4;
+            border: 1px solid #ccc;
+        }
+        .btn-confirm {
+            margin-bottom: 15px;
+        }
+    </style>
+</block>
+
+<block name="main">
+
+    <div class="top">
+        <img src="__HOME_IMG__/icon/logo.png" alt="">
+    </div>
+    <form id="form" action="<?php echo U('service'); ?>" method="post">
+    <div class="main">
+        <p class="title">请选择服务类型</p>
+        <div class="type">
+            <img src="__HOME_IMG__/icon/confirm-ok.png" alt="">
+        </div>
+        <div class="type type-A active">
+            
+        </div>
+        <div class="type type-B">
+            
+        </div>
+
+        <div class="service">
+            <p class="title">请输入服务单号</p>
+            <p class="content" style="margin:5px;">(格式为经销两位代码+五位数工单号，由服务顾问提供)</p>
+            <input id="wip" name="wip" class="input" type="text">
+            <input id="type" name="type" type="hidden" value="A">
+        </div>
+        <input class="btn btn-ok btn-confirm" type="button" value="开始计时">
+    </div>
+    </form>
+    <!-- UI dealer -->
+    <div class="ui shadow">
+        <div class="ui content confirm-dealer" style="padding: 30px 20px 20px;">
+            <p class="ui title">基础<span class="service-type">A</span>保养需要<span class="service-time">60</span>分钟</p>
+            <p class="ui sub-title">从您确认工单开始至交还钥匙结束</p>
+            <center>
+                <input class="btn ui button button-cancle" type="button" value="取消">
+                <input class="btn ui button button-success" type="button" value="确定">
+            </center>
+        </div>
+    </div>  
+</block>
+
+<block name="script">
+
+    <script type="text/javascript">
+        $(function(){
+            
+            var service_type = 0;
+            // set type height
+            var width = $(window).width();
+            var height = $(window).height();
+        	$(".type").css('height',height * 0.20 + 'px');
+
+            // click handler
+            $(".type").each(function(index) {
+               $(this).click(function() {
+                    if(service_type == index){
+                        return;
+                    }else {
+                        service_type = index;
+                    }
+                    $(this).toggleClass('active').siblings('.type').toggleClass('active');
+                    $("#type").val(service_type?'B':'A');
+                    $(".service-type").html(service_type?'B':'A');
+                    $(".service-time").html(service_type?'90':'60');
+               }); 
+            });
+
+            $(document).keydown(function (event) {
+                var key = event.keyCode | event;
+                if (key == 13) {
+                    return false;
+                };
+            });
+
+            $(".btn-confirm").click(function() {
+                $("#form").submit();
+            });
+
+            $("#form").submit(function() {
+                var redirect = "<?php echo U('service'); ?>";
+                var wip = $("#wip").val();
+                if(wip.length!=7) {
+                    benz.ui.alert('您输入的服务单号有误，请联系服务顾问!');
+                    return false;
+                }
+                var ajaxWipUrl = "<?php echo U('Home/Common/ajaxCheckWip') ?>"
+                var ajaxParam = {
+                    wip: wip
+                }
+                $.ajax({
+                    url: ajaxWipUrl,
+                    data: ajaxParam,
+                })
+                .done(function(res) {
+                    if(res.status == 1) {
+                        benz.ui.dealer();
+                    }else{
+                        benz.ui.alert('您输入的服务单号有误，请联系服务顾问!');
+                        return false;
+                    }
+                })
+            });
+        });
+    </script>
+</block>
+
+
+
+   
+

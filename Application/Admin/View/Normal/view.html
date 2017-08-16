@@ -1,0 +1,128 @@
+<extend name="_Layout/main"/>
+
+<block name="main">
+	<style type="text/css">
+		.main {
+			margin-bottom: 80px;
+		}
+		.block {
+			background-color: #fff;
+			margin-top: 20px;
+		}
+		h4 {
+			margin-top: 3px;
+		}
+		th {
+			width: 20%;
+			text-align: center;
+		}
+		td {
+			width: 70%;
+			text-align: center;
+			/*padding-left: 20px;*/
+		}
+		#qrcode {
+			width: 250px;
+			margin: 15px auto;
+			text-align: center;
+		}
+	</style>
+
+	<div class="col-md-10 block">
+		<fieldset>
+			<legend><h3>订单信息</h3></legend>
+			<table class="table table-bordered table table-striped table-hover">
+				<tr>
+					<th>服务经销商</th>
+					<td>{$dealer.dealer_name}</td>
+				</tr>
+				<tr>
+					<th>客户微信昵称</th>
+					<td>{$log.openid|getNickname}</td>
+				</tr>
+				<tr>
+					<th>车牌号</th>
+					<td>{$log.registration_no}</td>
+				</tr>
+				<tr>
+					<th>车架号</th>
+					<td>{$log.vin}</td>
+				</tr>
+				<tr>
+					<th>工单号</th>
+					<td>{$log.wip}</td>
+				</tr>
+				<tr>
+					<th>服务类型</th>
+					<td>{$log.service_type}</td>
+				</tr>
+				<tr>
+					<th>订单状态</th>
+					<td>{$log.normal_status|getNormalStatus}</td>
+				</tr>
+				<tr>
+					<th>开始时间</th>
+					<td>{$log.start_timestamp|date='Y-m-d H:i:s',###}</td>
+				</tr>
+				
+				<tr>
+					<th>二维码</th>
+					<td><div id="qrcode" style="padding:15px;"></div></td>
+				</tr>
+				
+			</table>
+		</fieldset>
+	</div>
+	<script type="text/javascript" src="__PUBLIC__/js/qrcode.min.js"></script>
+	<script type="text/javascript">
+
+		var id = "<?php echo $log['log_id']; ?>";
+		var wip = "<?php echo $log['wip']; ?>";
+		var sa = "<?php echo $log['sa_uid']; ?>";
+		// var url = `http://benz.hexdo.com/home/index/qrcode/back/qrcode/id/${id}/wip/${wip}/sa/${sa}`;
+		var url = 'https://dos.mercedes-benz.com.cn/benz/index.php/home/index/qrcode/back/qrcode/id/' + id + '/wip/' + wip + '/sa/' + sa;
+
+		function generateQRCode(rendermethod, width, height, url) {
+   		
+      var qrcode = new QRCode(document.getElementById("qrcode"), {
+				render: 'table', // 渲染方式有table方式（IE兼容）和canvas方式
+        width: width, //宽度 
+        height: height, //高度 
+        typeNumber: -1,	//计算模式
+        correctLevel: 2,	//二维码纠错级别
+        background: "#ffffff",	//背景颜色
+        foreground: "#000000"  //二维码颜色
+			});
+			qrcode.makeCode(url);
+
+    }
+
+    function init() {
+      generateQRCode("table", 200, 200, url);
+    }
+        //中文编码格式转换
+    function utf16to8(str) {
+      var out, i, len, c;
+      out = "";
+      len = str.length;
+      for (i = 0; i < len; i++) {
+        c = str.charCodeAt(i);
+        if ((c >= 0x0001) && (c <= 0x007F)) {
+          out += str.charAt(i);
+        } else if (c > 0x07FF) {
+          out += String.fromCharCode(0xE0 | ((c >> 12) & 0x0F));
+          out += String.fromCharCode(0x80 | ((c >> 6) & 0x3F));
+          out += String.fromCharCode(0x80 | ((c >> 0) & 0x3F));
+        } else {
+          out += String.fromCharCode(0xC0 | ((c >> 6) & 0x1F));
+          out += String.fromCharCode(0x80 | ((c >> 0) & 0x3F));
+        }
+      }
+      return out;
+    }   
+		
+		init();
+		// $('#code').qrcode(url);
+
+	</script>
+</block>

@@ -1,0 +1,276 @@
+<extend name="_Layout/main"/>
+<block name="style">
+  <style type="text/css">
+    select {
+      /*padding: 5px 10px;*/
+      /*margin-right: 5px;*/
+    }
+    .fomr-inline {
+      width: 100%;
+    }
+    .form-group {
+      width: 100%;
+      display: block;
+      padding: 10px 0;
+      border-bottom: 1px solid #ccc;
+    }
+    .display {
+      margin-top: 20px;
+    }
+
+    .table th,.table td {
+      text-align: center;
+    }
+
+  </style>
+</block>
+<block name="main">
+  <!-- <div class="container"> -->
+    <div class="top">
+    <form action="<?php echo U('index'); ?>" class="form-inline" method="post">
+      <div class="form-group">
+        <select class="form-control" name="region" id="region" <?php if($usertype>2) echo 'disabled'; ?>>
+          <option value="">全部大区</option>
+          <foreach name="regions" item="item">
+          <option value="{$item.region_code}" <?php if($item['region_code']==$region) echo 'selected'; ?>>
+            {$item.region_name}|{$item.region_code}
+          </option>
+          </foreach>
+        </select>
+        <select class="form-control" name="province" id="province" <?php if($usertype==4) echo 'disabled'; ?> style="width:120px;">
+          <option value="">省/直辖市</option>
+          <foreach name="provinces" item="item">
+          <option value="{$item.id}" <?php if($item['id']==$province) echo 'selected'; ?>>  {$item.name}
+          </option>
+          </foreach>
+        </select>
+        <select class="form-control" name="city" id="city" <?php if($usertype==4) echo 'disabled'; ?> style="width:120px;">
+          <option value="">市/区</option>
+          <foreach name="cities" item="item">
+          <option value="{$item.id}" <?php if($item['id']==$city) echo 'selected'; ?>>
+            {$item.name}
+          </option>
+          </foreach>
+        </select>
+        <select class="form-control" name="ld_code" id="dealer" <?php if($usertype==4) echo 'disabled'; ?> style="width:160px;">
+          <option value="">经销商</option>
+          <foreach name="dealers" item="item">
+          <option value="{$item.ld_code}" <?php if($item['ld_code']==$ld_code) echo 'selected'; ?>>
+            {$item.dealer_short}
+          </option>
+          </foreach>
+        </select>
+        
+        <input type="hidden" name="export">
+        <input type="button" class="btn btn-warning btn-export" style="float:right;" value="导出Excel">
+        <div class="search-box input-group" style="float:right;margin-right:20px;">
+          <input name="keyword" type="text" class="form-control" placeholder="请输入经销商代码|服务单号">
+          <div class="input-group-addon btn btn-search"><i class="fa fa-search"></i></div>
+        </div>
+      </div>
+      <br>
+      <div class="form-group">
+        <select class="form-control" name="district" id="DM" <?php if($usertype==4) echo 'disabled'; ?> style="width:120px;">
+          <option value="">DM</option>
+          <foreach name="districts" item="item">
+          <option value="{$item.district_id}" <?php if($item['district_id']==$district) echo 'selected'; ?>>
+            {$item.manager}
+          </option>
+          </foreach>
+        </select>
+        <select class="form-control" name="group" style="margin-right: 30px;" id="group" <?php if($usertype==4) echo 'disabled'; ?>>
+          <option value="">Group</option>
+          <foreach name="groups" item="item">
+          <option value="{$item.group_code}" <?php if($item['group_code']==$group) echo 'selected'; ?>>
+            {$item.group_code}
+          </option>
+          </foreach>
+        </select>
+
+        <input name="start_date" class="form-control" type="text" value="{$start_date}" style="width:120px;"> — 
+        <input name="end_date" class="form-control" type="text" value="{$end_date}" style="width:120px;">
+        <input type="submit" class="btn btn-info" value="筛选">
+        
+      </div>
+      <input type="hidden" name="p">
+    </form>
+    </div>
+
+    <div class="display">
+      <table class="table table-bordered table-striped">
+        <tr>
+          <th>序号</th>
+          <th>客户微信昵称</th>
+          <th>所属大区</th>
+          <th>经销商</th>
+          <th>服务类型</th>
+          <th>工单号</th>
+          <th>中奖时间</th>
+        </tr>
+        <foreach name="list" item="item">
+        <tr>
+          <td>{$item.serial}</td>
+          <td>{$item.openid|getNickname}</td>
+          <td>{$item.ld_code|getDealerInfo='region_code'|getRegionCode}</td>
+          <td>{$item.ld_code|getDealerInfo='dealer_short'}</td>
+          <td>{$item.service_type}</td>
+          <td>{$item.wip}</td>
+          <td>{$item.draw_time|date='Y-m-d H:i:s',###}</td>
+        </tr>
+        </foreach>
+      </table>
+      <nav class="col-sm-12">
+        <div class="pagination">{$page}</div>
+      </nav>
+    </div>
+  <!-- </div> -->
+</block>
+
+<block name="script">
+
+  <link rel="stylesheet" href="__HOME_CSS__/jquery-ui.css">
+  <script type="text/javascript" src="__HOME_JS__/jquery-ui.min.js"></script>
+  <script type="text/javascript">
+    $(function(){
+
+      // 分页
+      var current = parseInt($(".pagination .current a").html(), 10);
+      $(".pagination a").each(function() {
+        $(this).attr('href','javascript:void(0)');
+      });
+      $(".pagination .prev").click(function() {
+        $('input[name="p"]').val(current-1);
+        $('form').submit();
+      });
+      $(".pagination .num").each(function() {
+        $(this).click(function() {
+          var page = $(this).html();
+          if(page == current) {
+            return;
+          }else {
+            $('input[name="p"]').val(page);
+            $('form').submit();
+          }
+        });
+      });
+      $(".pagination .next").click(function() {
+        $('input[name="p"]').val(current+1);
+        $('form').submit();
+      });
+      $(".pagination .first").click(function() {
+        var page = $(this).html();
+        $('input[name="p"]').val(page);
+        $('form').submit();
+      });
+      $(".pagination .end").click(function() {
+        var page = $(this).html();
+        $('input[name="p"]').val(page);
+        $('form').submit();
+      });
+
+      $(".btn-search").click(function() {
+        $('form').submit();
+      });
+
+      $(".btn-export").click(function() {
+        $('input[name="export"]').val('export');
+        $('form').submit();
+        $('input[name="export"]').val('');
+      });
+
+      $('input[name="start_date"]').datepicker({
+        "dateFormat":"yy-mm-dd"
+      });
+
+      $('input[name="end_date"]').datepicker({
+        "dateFormat":"yy-mm-dd"
+      });
+      
+      function updateProvince() {
+        var region_code = $("#region").val();
+        var url = "<?php echo U('Admin/Common/ajaxProvince'); ?>";
+        var param = {
+          region_code: region_code
+        };
+        $.ajax({
+          url: url,
+          data: param,
+        })
+        .done(function(data) {
+          $("#province").html(data);
+        });
+      }
+      function updateCity() {
+        var url = "<?php echo U('Admin/Common/ajaxCity'); ?>";
+        var param = {
+          province: $("#province").val(),
+          district_id: $("#DM").val()
+        }
+        $.ajax({
+          url: url,
+          data: param,
+        })
+        .done(function(data) {
+          $("#city").html(data);
+        });
+      }
+
+      function updateDealer() {
+        var url = "<?php echo U('Admin/Common/ajaxDealer'); ?>";
+        var param = {
+          region_code: $("#region").val(),
+          province_code: $("#province").val(),
+          city_code: $("#city").val(),
+          district_id: $("#DM").val(),
+          group: $("#group").val(),
+        }
+        $.ajax({
+          url: url,
+          data: param,
+        })
+        .done(function(data) {
+          $("#dealer").html(data);
+        });
+      }
+
+      function updateDistrict() {
+        var url = "<?php echo U('Admin/Common/ajaxDistrict'); ?>";
+        var param = {
+          region_code: $("#region").val()
+        }
+        $.ajax({
+          url: url,
+          data: param,
+        })
+        .done(function(data) {
+          $("#DM").html(data);
+        });
+      }
+
+      $("#region").change(function() {
+        updateProvince();
+        updateCity();
+        updateDistrict();
+        updateDealer();
+      });
+
+      $("#province").change(function(){
+        updateCity();
+        updateDealer();
+      });
+
+      $("#city").change(function() {
+        updateDealer();
+      });
+
+      $("#DM").change(function() {
+        updateCity();
+        updateDealer();
+      });
+
+      $("#group").change(function() {
+        updateDealer();
+      });
+    });
+  </script>
+</block>

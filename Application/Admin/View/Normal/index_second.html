@@ -1,0 +1,432 @@
+<extend name="_Layout/main"/>
+<block name="style">
+  <style type="text/css">
+    select {
+      /*padding: 5px 10px;*/
+      /*margin-right: 5px;*/
+    }
+    .fomr-inline {
+      width: 100%;
+    }
+    .form-group {
+      width: 100%;
+      display: block;
+      padding: 10px 0;
+      border-bottom: 1px solid #ccc;
+    }
+    .display {
+      margin-top: 20px;
+    }
+
+    .table th,.table td {
+      text-align: center;
+    }
+  </style>
+  <link rel="stylesheet" href="__PUBLIC__/js/jquery-ui-timepicker-addon.min.css">
+  <link href="__PUBLIC__/css/jquery-ui.css" rel="stylesheet">
+</block>
+<block name="main">
+  <!-- <div class="container"> -->
+    <ul class="data">
+      <li><span class="title">当日进厂：</span><span class="number">{$today_check}</span></li>
+      <li><span class="title">当日PDI：</span><span class="number">{$today_pdi}</span></li>
+      <li><span class="title">当日滞留：</span><span class="number">{$today_delay}</span></li>
+    </ul>
+    <ul class="data">
+      <li><span class="title">本月总进厂：</span><span class="number">{$month_check}</span></li>
+      <li><span class="title">本月PDI：</span><span class="number">{$month_pdi}</span></li>
+      <li><span class="title">总滞留：</span><span class="number">{$total_delay}</span></li>
+    </ul>
+    <div class="top">
+    <form action="<?php echo U('index'); ?>" class="form-inline" method="post">
+      <div class="setting">
+        <div class="filter clearfix">
+          <div class="range">
+            进厂时间：
+            <input name="start_date" type="text" id="from" value="{$start_date}"> — <input name="end_date" type="text" id="to" value="{$end_date}">
+            <span class="export btn-submit">筛选</span>
+          </div>
+          <div class="type">
+            工种：
+            <select>
+              <option value="">全部</option>
+              <option value="">保养</option>
+              <option value="">维修</option>
+              <option value="">A保</option>
+              <option value="">B保</option>
+              <option value="">索赔</option>
+            </select>
+          </div>
+          <div class="status">
+            状态：
+            <select name="log_status" id="logStatus">
+              <option value="">全部</option>
+              <option value="A" <?php if(A==$log_status) echo 'selected'; ?>>登记进厂</option>
+              <option value="B" <?php if(B==$log_status) echo 'selected'; ?>>已开钟</option>
+              <option value="D" <?php if(D==$log_status) echo 'selected'; ?>>已关钟</option>
+              <option value="G" <?php if(G==$log_status) echo 'selected'; ?>>准备交车</option>
+              <option value="I" <?php if(I==$log_status) echo 'selected'; ?>>已结账</option>
+            </select>
+          </div>
+        </div>
+        <div class="fr">
+          <div class="search-box">
+            <input name="keyword" type="search" class="search-text" placeholder="WIP号、车牌号" value="{$keyword}">
+            <input type="button" class="search-btn btn-search">
+          </div>
+          <input type="hidden" name="export">
+          <!-- <input type="button" class="btn btn-warning btn-export" style="float:right;" value="导出Excel"> -->
+          <span class="export btn-export">导出</span>
+        </div>
+      </div>
+      <input type="hidden" name="p">
+    </form>
+    </div>
+
+    <div class="display table-wrap">
+      <table class="table table-bordered table-striped">
+        <tr>
+          <th>操作</th>
+          <th>序号</th>
+          <th>客户微信昵称</th>
+          <th>经销商</th>
+          <th>服务类型</th>
+          <th>服务单号</th>
+          <th>车牌号</th>
+          <th>进厂时间</th>
+          <th>维修顾问</th>
+          <th>预计取车</th>
+          <th>状态</th>
+          <th>完工时间</th>
+          <th>派工时间</th>
+          <th>终检时间</th>
+          <th>技师</th>
+          <th>自定义字段1</th>
+          <th>自定义字段2</th>
+          <th>自定义字段3</th>
+          <th>自定义字段4</th>
+          
+        </tr>
+        <foreach name="list" item="item">
+        <tr>
+          <td class="operate">
+            <!-- <a class="btn btn-sm btn-success" href="<?php echo U('view',array('id'=>$item['log_id'])); ?>">查看</a> -->
+                        
+            <if condition = "$item['openid']" >
+              <a class="btn btn-sm btn-danger ajax-get confirm" href="<?php echo U('unbind',array('id'=>$item['log_id'])); ?>">解绑微信</a>
+            <else />
+              <a href="javascript:void(0);" class="btn btn-sm btn-danger" disabled="disabled">解绑微信</a>
+            </if>
+
+            <a class="btn btn-sm btn-info edit-row">编辑</a>
+            <a class="btn btn-sm btn-info save-row" style="display:none;" log="{$item.log_id}">保存</a>
+            <a class="btn btn-sm btn-info cancel-row" style="display:none;">取消</a>
+            
+          </td>
+          <td>{$item.serial}</td>
+          <td>{$item.openid|getNickname}</td>
+          <td>{$item.ld_code|getDealerInfo='dealer_short'}</td>
+          <td>{$item.service_type}</td>
+          <td>{$item.wip}</td>
+          <td>{$item.registration_no}</td>
+          <td>{$item.start_timestamp|date='Y-m-d H:i:s',###}</td>
+          <td>{$item.sa}</td>
+          <td><?php echo get_value($item['taking_time'], 'time', '——'); ?></td>
+          <td>{$item.normal_status}</td>
+          <td class="editable time" name="complete_time"><?php echo get_value($item['complete_time'], 'time', '——'); ?></td>
+          <td class="editable time" name="dispatch_time"><?php echo get_value($item['dispatch_time'], 'time', '——'); ?></td>
+          <td class="editable time" name="final_start_time"><?php echo get_value($item['final_start_time'], 'time', '——'); ?></td>
+          <td class="editable" name="technician">{$item.technician}</td>
+          <td class="editable" name="custom1">{$item.custom1}</td>
+          <td class="editable" name="custom2">{$item.custom2}</td>
+          <td class="editable" name="custom3">{$item.custom3}</td>
+          <td class="editable" name="custom4">{$item.custom4}</td>
+
+        </tr>
+        </foreach>
+      </table>
+      <div class="table-tips">显示{$first}-{$last}条，共{$count}条</div>
+      <div class="pagination">
+        <span class="prev">前一页</span>
+        <foreach name="page" item="item">
+          <a href="#" class="{$item.class}">{$item.name}</a>
+        </foreach>
+        <span class="next">后一页</span>
+        
+        <!-- <a href="#">1</a>
+        <a href="#" class="current">2</a>
+        <a href="#">3</a>
+        <a href="#">4</a>
+        <span class="spot">...</span>
+        <a href="#">8</a> -->
+        
+      </div>
+      <!-- <nav class="col-sm-12">
+        <div class="pagination">{$page}</div>
+      </nav> -->
+    </div>
+  <!-- </div> -->
+</block>
+
+<block name="script">
+
+  <script src="__PUBLIC__/js/jquery-ui.js"></script>
+  <script src="__PUBLIC__/js/jquery-ui-timepicker-addon.js"></script>
+  <script type="text/javascript">
+    $(function(){
+
+      $( "#from" ).datetimepicker({
+        showSecond: true,
+        timeFormat: 'hh:mm:ss',
+        dateFormat: 'yy-mm-dd',
+        changeMonth: true,
+        changeYear: true,
+        onClose: function( selectedDate ) {
+          $( "#to" ).datetimepicker( "option", "minDate", selectedDate );
+        }
+      });
+      $( "#to" ).datetimepicker({
+        showSecond: true,
+        timeFormat: 'hh:mm:ss',
+        dateFormat: 'yy-mm-dd',
+        changeMonth: true,
+        changeYear: true,
+        onClose: function( selectedDate ) {
+          $( "#from" ).datetimepicker( "option", "maxDate", selectedDate );
+        }
+      });
+
+      var row = {}
+      function edit($dom) {
+        // 遍历可编辑组件
+        $dom.closest('tr').children('.editable').each(function() {
+          var name = $(this).attr('name')
+          var value = $(this).html()
+          row[name] = value
+          $input = $('<input>').attr('name', name).val(value)
+          if($(this).hasClass('time')) {
+            $input.datetimepicker({
+              showSecond: true,
+              timeFormat: 'hh:mm:ss',
+              dateFormat: 'yy-mm-dd',
+              changeMonth: true,
+              changeYear: true
+            });
+          }
+          $(this).html('').append($input)
+        })
+      }
+
+      function cancel_edit($dom) {
+        $dom.closest('tr').children('.editable').each(function() {
+          var name = $(this).attr('name')
+          var value = row[name]
+          $(this).html(value)
+        })
+      }
+
+      function save($dom) {
+
+        var url = "<?php echo U('Admin/Common/ajaxSaveLog'); ?>";
+        var log = {
+          log_id: $dom.attr('log')
+        }
+        $dom.closest('tr').children('.editable').each(function() {
+          var $input = $(this).find('input')
+          var name = $(this).attr('name')
+          var value = $input.val()
+          log[name] = value
+        })
+        $.ajax({
+          type: 'POST',
+          url: url,
+          data: log
+        }).done(function(data) {
+          save_end($dom, data.data)
+        })
+      }
+
+      function save_end($dom, data) {
+        $dom.closest('tr').children('.editable').each(function() {
+          var name = $(this).attr('name')
+          var value = data[name]
+          $(this).html('').html(value)
+        })
+      }
+
+      // 编辑
+      $(".edit-row").each(function() {
+        $(this).click(function() {
+          edit($(this))
+          $(this).hide().next('.save-row').show().next('.cancel-row').show()
+        })
+      })
+
+      // 保存编辑数据
+      $(".save-row").each(function() {
+        $(this).click(function() {
+          save($(this))
+          $(this).hide().next('.cancel-row').hide()
+          $(this).prev('.edit-row').show()
+        })
+      })
+
+      // 取消
+      $(".cancel-row").each(function() {
+        $(this).click(function() {
+          cancel_edit($(this))
+          $(this).hide().prev('.save-row').hide().prev('.edit-row').show()
+        })
+      })
+
+
+      // 分页
+      var current = parseInt($(".pagination .current a").html(), 10);
+      $(".pagination a").each(function() {
+        $(this).attr('href','javascript:void(0)');
+      });
+      $(".pagination .prev").click(function() {
+        $('input[name="p"]').val(current-1);
+        $('form').submit();
+      });
+      $(".pagination .num").each(function() {
+        $(this).click(function() {
+          var page = $(this).html();
+          if(page == current) {
+            return;
+          }else {
+            $('input[name="p"]').val(page);
+            $('form').submit();
+          }
+        });
+      });
+      $(".pagination .next").click(function() {
+        $('input[name="p"]').val(current+1);
+        $('form').submit();
+      });
+      $(".pagination .first").click(function() {
+        var page = $(this).html();
+        $('input[name="p"]').val(page);
+        $('form').submit();
+      });
+      $(".pagination .end").click(function() {
+        var page = $(this).html();
+        $('input[name="p"]').val(page);
+        $('form').submit();
+      });
+
+      $(".btn-search").click(function() {
+        $('form').submit();
+      });
+
+      $(".btn-submit").click(function() {
+        $('form').submit();
+      });
+
+      // 筛选状态
+      $("#logStatus").change(function() {
+        $('form').submit()
+      })
+
+      $(".btn-export").click(function() {
+        $('input[name="export"]').val('export');
+        $('form').submit();
+        $('input[name="export"]').val('');
+      });
+
+      $('input[name="start_date"]').datepicker({
+        "dateFormat":"yy-mm-dd"
+      });
+
+      $('input[name="end_date"]').datepicker({
+        "dateFormat":"yy-mm-dd"
+      });
+      
+      function updateProvince() {
+        var region_code = $("#region").val();
+        var url = "<?php echo U('Admin/Common/ajaxProvince'); ?>";
+        var param = {
+          region_code: region_code
+        };
+        $.ajax({
+          url: url,
+          data: param,
+        })
+        .done(function(data) {
+          $("#province").html(data);
+        });
+      }
+      function updateCity() {
+        var url = "<?php echo U('Admin/Common/ajaxCity'); ?>";
+        var param = {
+          province: $("#province").val(),
+          district_id: $("#DM").val()
+        }
+        $.ajax({
+          url: url,
+          data: param,
+        })
+        .done(function(data) {
+          $("#city").html(data);
+        });
+      }
+
+      function updateDealer() {
+        var url = "<?php echo U('Admin/Common/ajaxDealer'); ?>";
+        var param = {
+          region_code: $("#region").val(),
+          province_code: $("#province").val(),
+          city_code: $("#city").val(),
+          district_id: $("#DM").val(),
+          group: $("#group").val(),
+        }
+        $.ajax({
+          url: url,
+          data: param,
+        })
+        .done(function(data) {
+          $("#dealer").html(data);
+        });
+      }
+
+      function updateDistrict() {
+        var url = "<?php echo U('Admin/Common/ajaxDistrict'); ?>";
+        var param = {
+          region_code: $("#region").val()
+        }
+        $.ajax({
+          url: url,
+          data: param,
+        })
+        .done(function(data) {
+          $("#DM").html(data);
+        });
+      }
+
+      $("#region").change(function() {
+        updateProvince();
+        updateCity();
+        updateDistrict();
+        updateDealer();
+      });
+
+      $("#province").change(function(){
+        updateCity();
+        updateDealer();
+      });
+
+      $("#city").change(function() {
+        updateDealer();
+      });
+
+      $("#DM").change(function() {
+        updateCity();
+        updateDealer();
+      });
+
+      $("#group").change(function() {
+        updateDealer();
+      });
+    });
+  </script>
+</block>

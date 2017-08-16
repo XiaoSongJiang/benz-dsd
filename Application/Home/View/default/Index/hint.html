@@ -1,0 +1,71 @@
+<extend name="_Layout/main"/>
+
+<block name="title"><title>{$meta_title}</title></block>
+
+<block name="style">
+  <style type="text/css">
+    body {
+      width: 100%;
+      background: url(__HOME_IMG__/icon/message-bg.png);
+      background-size: cover;
+      background-repeat: no-repeat;
+    }
+    img {
+      width: 100%;
+    }
+    .message {
+      margin-top: 180px;
+    }
+    .message p {
+      font-size: 20px;
+      padding: 10px 50px;
+    }
+    .to-life {
+      position: absolute;
+      width: 200px;
+      bottom: 30px;
+    }
+    @media (max-width: 320px) {
+      .message {
+        margin-top: 140px;
+      }
+    }
+  </style>
+</block>
+
+<block name="main">
+  
+  <div class="top">
+    <img src="__HOME_IMG__/icon/logo.png" alt="">
+  </div>
+  <div class="main">
+    <div class="message">
+      <p><img src="__HOME_IMG__/icon/{$message}.png" alt="" style="width:80%;"></p>
+    </div>
+    <if condition="$activity eq 1">
+      <input class="btn btn-ok btn-confirm" type="button" value="立即抽奖" style="margin-top:40px;">
+    </if>
+  </div>
+  <center class="to-life">
+    <img src="__HOME_IMG__/icon/to-life.png" alt="">
+  </center>
+  
+</block>
+
+<block name="script">
+  <script type="text/javascript">
+    $(function(){
+      width = $(window).width();
+      $(".to-life").css('left',(width-$(".to-life").width())/2);
+
+      $('.btn-confirm').click(function(){
+        window.location.href = "<?php echo U('lottery'); ?>";
+      });
+    });
+  </script>
+</block>
+
+
+
+
+

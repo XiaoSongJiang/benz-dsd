@@ -1,0 +1,324 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box; }
+
+body {
+  background-color: #f3f3f3; }
+
+a {
+  text-decoration: none;
+  outline: none; }
+
+a:link, a:visited, a:hover, a:active {
+  text-decoration: none;
+  outline: none; }
+
+input, select {
+  border: none;
+  outline: none; }
+
+.clearfix:after {
+  content: '';
+  display: block;
+  height: 0;
+  visibility: hidden;
+  clear: both; }
+
+.header {
+  width: 100%;
+  height: 150px;
+  background: url("images/header_bg.gif") no-repeat center;
+  background-size: cover;
+  position: relative; }
+  .header .logo {
+    margin-left: 82px;
+    margin-top: 48px; }
+  .header .user-center {
+    position: absolute;
+    top: 58px;
+    right: 72px;
+    font-size: 12px;
+    color: #fff;
+    text-align: center; }
+    .header .user-center .oab {
+      float: left;
+      margin-right: 45px; }
+      .header .user-center .oab .name {
+        margin-top: 8px; }
+    .header .user-center .user {
+      float: left;
+      padding-top: 3px;
+      padding-bottom: 15px;
+      cursor: pointer;
+      position: relative; }
+      .header .user-center .user .name {
+        margin-top: 7px; }
+      .header .user-center .user:hover .setting {
+        display: block; }
+    .header .user-center .setting {
+      display: none;
+      position: absolute;
+      right: -43px;
+      margin-top: 15px;
+      width: 184px;
+      height: 92px;
+      border: 1px solid #cccccc;
+      border-radius: 3px;
+      background-color: white;
+      box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.137); }
+      .header .user-center .setting a {
+        display: block;
+        width: 100%;
+        height: 50%;
+        line-height: 46px;
+        color: #7d7d7d; }
+        .header .user-center .setting a:hover {
+          color: #3c3c3c;
+          background-color: #e8e8e8; }
+      .header .user-center .setting .password {
+        background: url("images/password2.png") 35px center no-repeat;
+        padding-left: 30px; }
+      .header .user-center .setting .logout {
+        background: url("images/logout.png") 35px center no-repeat;
+        padding-left: 2px; }
+
+.order-wrap {
+  padding: 25px 30px; }
+  .order-wrap .nav {
+    width: 72px;
+    background-color: #fff;
+    margin-right: 30px;
+    padding: 30px 0 25px 0;
+    border: 1px solid #cccccc;
+    border-radius: 3px;
+    float: left; }
+    .order-wrap .nav .menu {
+      cursor: pointer;
+      margin-bottom: 15px;
+      margin-left: 22px; }
+    .order-wrap .nav ul {
+      list-style: none;
+      clear: both; }
+      .order-wrap .nav ul li {
+        cursor: pointer;
+        white-space: nowrap;
+        height: 50px; }
+        .order-wrap .nav ul li img {
+          margin-left: 22px;
+          padding-top: 10px; }
+        .order-wrap .nav ul li span {
+          display: none;
+          vertical-align: super; }
+  .order-wrap .no-hover ul li:hover {
+    display: inline-block;
+    width: auto;
+    background-color: #E8E8E8;
+    padding-right: 22px;
+    border-radius: 2px;
+    border-left: 2px solid #000; }
+    .order-wrap .no-hover ul li:hover span {
+      display: inline;
+      margin-left: 15px; }
+    .order-wrap .no-hover ul li:hover img {
+      margin-left: 20px; }
+  .order-wrap .yes-hover {
+    display: inline-block;
+    width: auto; }
+    .order-wrap .yes-hover .menu {
+      margin-right: 22px;
+      float: right; }
+    .order-wrap .yes-hover ul li span {
+      display: inline;
+      margin-left: 15px;
+      margin-right: 22px; }
+  .order-wrap .main-area {
+    overflow: hidden;
+    background-color: #fff;
+    padding: 40px 60px 60px;
+    border: 1px solid #cccccc;
+    border-radius: 3px; }
+    .order-wrap .main-area .data {
+      list-style: none;
+      height: 45px;
+      line-height: 45px; }
+      .order-wrap .main-area .data li {
+        display: inline-block;
+        width: 220px;
+        color: #000000; }
+        .order-wrap .main-area .data li .title {
+          display: inline-block;
+          width: 106px;
+          font-size: 16px; }
+        .order-wrap .main-area .data li .number {
+          font-size: 22px; }
+    .order-wrap .main-area .setting {
+      padding: 40px 0 20px 0;
+      position: relative; }
+      .order-wrap .main-area .setting .search-box {
+        width: 290px;
+        height: 30px;
+        border-radius: 2px;
+        position: relative;
+        float: left; }
+        .order-wrap .main-area .setting .search-box .search-text {
+          float: left;
+          width: 260px;
+          height: 30px;
+          line-height: 30px;
+          padding-left: 8px;
+          background-color: #fff;
+          border-radius: 2px 0 0 2px;
+          border: 1px solid #999999;
+          border-right: none; }
+        .order-wrap .main-area .setting .search-box .search-btn {
+          width: 30px;
+          height: 30px;
+          border-radius: 0 2px 2px 0;
+          background: #2991ea url("images/search.png") center no-repeat;
+          cursor: pointer; }
+      .order-wrap .main-area .setting .export {
+        display: inline-block;
+        width: 76px;
+        height: 30px;
+        border-radius: 4px;
+        background: #2991ea url("images/export.png") 10px center no-repeat;
+        color: #fff;
+        margin-left: 30px;
+        line-height: 30px;
+        padding-left: 32px;
+        cursor: pointer; }
+      .order-wrap .main-area .setting .filter {
+        color: #27282d;
+        line-height: 30px; }
+        .order-wrap .main-area .setting .filter .range, .order-wrap .main-area .setting .filter .type, .order-wrap .main-area .setting .filter .status {
+          float: left; }
+        .order-wrap .main-area .setting .filter .range input {
+          display: inline-block;
+          height: 30px;
+          border: 1px solid #ccc; }
+        .order-wrap .main-area .setting .filter .type, .order-wrap .main-area .setting .filter .status {
+          margin-left: 30px; }
+          .order-wrap .main-area .setting .filter .type select, .order-wrap .main-area .setting .filter .status select {
+            display: inline-block;
+            width: 85px;
+            height: 30px;
+            padding: 6px 12px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075); }
+      .order-wrap .main-area .setting .fr {
+        position: absolute;
+        right: 0;
+        bottom: 20px; }
+    .order-wrap .main-area .table-wrap {
+      overflow: auto;
+      width: 100%;
+      border: 1px solid #eee; }
+    .order-wrap .main-area table {
+      border-collapse: collapse;
+      width: 100%;
+      color: #333333; }
+      .order-wrap .main-area table th {
+        text-align: center;
+        height: 45px;
+        border: 1px solid #eee;
+        min-width: 100px; }
+      .order-wrap .main-area table td {
+        text-align: center;
+        border: 1px solid #eee;
+        min-width: 100px;
+        padding: 10px;
+        white-space: nowrap; }
+      .order-wrap .main-area table td input {
+        display: none;
+        border: 1px solid #ccc;
+        height: 30px; }
+      .order-wrap .main-area table .custom1 input {
+        width: 150px; }
+      .order-wrap .main-area table .custom2 input {
+        width: 300px; }
+      .order-wrap .main-area table .overtime {
+        color: red; }
+      .order-wrap .main-area table tr:not(:first-child):hover {
+        background-color: #ebf8fd; }
+      .order-wrap .main-area table .operation span {
+        cursor: pointer;
+        display: inline-block;
+        width: 60px;
+        height: 30px;
+        line-height: 30px;
+        text-align: center;
+        color: #fff;
+        background-color: #2991ea; }
+      .order-wrap .main-area table .operation .editing {
+        display: none; }
+        .order-wrap .main-area table .operation .editing .save, .order-wrap .main-area table .operation .editing .cancel {
+          display: inline-block;
+          width: 60px;
+          height: 30px;
+          line-height: 30px;
+          text-align: center;
+          color: #fff;
+          background-color: #2991ea; }
+      .order-wrap .main-area table .sort {
+        display: inline-block;
+        position: relative;
+        width: 10px;
+        height: 10px; }
+        .order-wrap .main-area table .sort .up, .order-wrap .main-area table .sort .down {
+          width: 0;
+          height: 0;
+          border-left: 4px solid transparent;
+          border-right: 4px solid transparent;
+          position: absolute;
+          left: 0; }
+        .order-wrap .main-area table .sort .up {
+          border-bottom: 8px solid #666666;
+          margin-top: -4px; }
+          .order-wrap .main-area table .sort .up:hover {
+            border-bottom-color: #333333; }
+        .order-wrap .main-area table .sort .down {
+          border-top: 8px solid #666666;
+          margin-top: 5px; }
+          .order-wrap .main-area table .sort .down:hover {
+            border-top-color: #333333; }
+    .order-wrap .main-area .table-tips {
+      font-size: 14px;
+      color: #333333;
+      padding: 20px 0 50px 0; }
+    .order-wrap .main-area .pagination {
+      text-align: center; }
+      .order-wrap .main-area .pagination a {
+        display: inline-block;
+        width: 28px;
+        height: 28px;
+        line-height: 28px;
+        border-radius: 50%;
+        background-color: #f2f2f2;
+        color: #aeaeae;
+        margin: 0 6px; }
+        .order-wrap .main-area .pagination a:hover {
+          background-color: #2991ea;
+          color: #fff; }
+      .order-wrap .main-area .pagination .current {
+        background-color: #2991ea;
+        color: #fff; }
+      .order-wrap .main-area .pagination .prev, .order-wrap .main-area .pagination .next {
+        color: #2991ea;
+        cursor: pointer; }
+      .order-wrap .main-area .pagination .prev {
+        margin-right: 24px; }
+      .order-wrap .main-area .pagination .next {
+        margin-left: 24px; }
+      .order-wrap .main-area .pagination .spot {
+        color: #aeaeae; }
+
+.footer {
+  font-size: 12px;
+  color: #27282d;
+  text-align: center;
+  margin-top: 38px; }
+
+/*# sourceMappingURL=order.css.map */

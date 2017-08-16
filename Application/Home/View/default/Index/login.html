@@ -1,0 +1,92 @@
+<extend name="_Layout/main"/>
+
+<block name="title"><title>{$meta_title}</title></block>
+
+<block name="style">
+  <style type="text/css">
+    body {
+      width: 100%;
+      background: url(__HOME_IMG__/icon/message-bg.png);
+      background-size: cover;
+      background-repeat: no-repeat;
+    }
+    img {
+      width: 100%;
+    }
+    .login {
+      margin-top: 100px;
+    }
+    .login p{
+      padding: 10px 15px;
+      font-size: 20px;
+    }
+    .input {
+      border: 1px solid black;
+      padding: 5px 10px;
+    }
+    .to-life {
+      position: absolute;
+      width: 200px;
+      bottom: 30px;
+    }
+
+    @media (max-width: 320px) {
+      .login {
+        margin-top: 40px;
+      }
+    }
+  </style>
+</block>
+
+<block name="main">
+
+  <div class="top">
+    <img src="__HOME_IMG__/icon/logo.png" alt="">
+  </div>
+  <div class="main">
+    <div class="login">
+      <p>账号：<input class="input sa-name" type="text" style="width:70%;"></p>
+      <p>密码：<input class="input sa-pwd" type="password" style="width:70%;"></p>
+    </div>
+    <input class="btn btn-ok btn-confirm" type="button" value="绑定账号" style="margin-top:40px;">
+    <p style="margin-top:40px;">* 如果不知道账号密码，请咨询Dealer！</p>
+  </div>
+  <center class="to-life">
+    <img src="__HOME_IMG__/icon/to-life.png" alt="">
+  </center>
+  
+</block>
+
+<block name="script">
+  <script type="text/javascript">
+    $(function(){
+      width = $(window).width();
+      $(".to-life").css('left',(width-$(".to-life").width())/2);
+
+      $('.btn-confirm').click(function(){
+        var url = "<?php echo U('Home/Common/binding') ?>";
+        var param = {
+          'username': $(".sa-name").val(),
+          'password': $(".sa-pwd").val()
+        }
+
+        $.ajax({
+          url: url,
+          data: param,
+        })
+        .done(function(res) {
+          if(res.status == true) {
+            benz.ui.alert(res.msg);
+          }else{
+            benz.ui.alert(res.msg);
+          }
+        });
+      });
+    });
+  </script>
+</block>
+
+
+
+
+

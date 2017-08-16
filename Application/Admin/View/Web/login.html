@@ -1,0 +1,82 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta content="yes" name="apple-mobile-web-app-capable">
+  <meta content="yes" name="apple-touch-fullscreen">
+  <meta content="telephone=no,email=no" name="format-detection">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="cache-control" content="no-cache">
+  <meta http-equiv="expires" content="0">
+  <meta name="viewport" content="width=750,user-scalable=no">
+  <title>透明车间</title>
+  <style>
+    * {
+      padding: 0;
+      margin: 0;
+      box-sizing: border-box;
+    }
+    body {
+      padding: 65px 75px 0;
+      background-color: #eff1f3;
+      font-size: 32px;
+    }
+    input[type="submit"], input[type="reset"], input[type="button"] {
+      -webkit-appearance: none;
+    }
+    .logo {
+      margin-bottom: 160px;
+    }
+    .id, .password {
+      display: block;
+      width: 600px;
+      height: 110px;
+      border: 1px solid rgb(204, 204, 204);
+      outline: none;
+      padding-left: 80px;
+      border-radius: 2px;
+      font-size: 32px;
+    }
+    .id {
+      background: #fff url(__PUBLIC__/images/icon_user.png) 30px center no-repeat;
+      margin-bottom: 32px;
+    }
+    .password {
+      background: #fff url(__PUBLIC__/images/lock.png) 30px center no-repeat;
+    }
+    .tips {
+      margin-top: 65px;
+      font-size: 30px;
+      color: #666;
+      padding-left: 52px;
+      background: url("__PUBLIC__/images/i.png") 0 0 no-repeat;
+    }
+    .submit {
+      display: block;
+      width: 600px;
+      height: 108px;
+      line-height: 108px;
+      border-radius: 2px;
+      background-color: rgb(41, 145, 234);
+      text-align: center;
+      color: #fff;
+      border: none;
+      outline: none;
+      font-size: 32px;
+      margin-top: 70px;
+    }
+  </style>
+</head>
+<body>
+  <img src="__PUBLIC__/images/m_logo.png" alt="" class="logo">
+
+  <form action="{:U('Web/login')}" method="post">
+    <input type="text" placeholder="账号" class="id" name="username">
+    <input type="text" style="display:none;">
+    <input type="password" placeholder="密码" class="password" name="password">
+    <div class="tips">请使用GEMS用户名（以D8开头）和对应 密码登录</div>
+    <input type="submit" value="立即登录" class="submit">
+  </form>
+</body>
+</html>

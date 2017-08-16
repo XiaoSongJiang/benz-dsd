@@ -1,0 +1,107 @@
+<extend name="_Layout/main"/>
+
+<block name="title"><title>{$meta_title}</title></block>
+
+<block name="style">
+  <style type="text/css">
+    body {
+      width: 100%;
+      background: url(__HOME_IMG__/icon/message-bg.png);
+      background-size: cover;
+      background-repeat: no-repeat;
+    }
+    img {
+      width: 100%;
+    }
+    .detail {
+      width: 80%;
+      margin: 0 auto;
+      margin-top: 40px;
+      border-color: black;
+    }
+    .detail th ,.detail td{
+      text-align: center;
+      padding: 10px 10px;
+    }
+    
+    .to-life {
+      position: absolute;
+      width: 200px;
+      bottom: 30px;
+    }
+
+    @media (max-width: 320px) {
+      .detail {
+        margin-top: 40px;
+      }
+    }
+  </style>
+</block>
+
+<block name="main">
+
+  <div class="top">
+    <img src="__HOME_IMG__/icon/logo.png" alt="">
+  </div>
+  <div class="main">
+    <table class="detail table table-striped table-bordered">
+      <tr>
+        <th>服务经销商</th>
+        <td>{$dealer.dealer_short}</td>
+      </tr>
+      <!-- <tr>
+        <th>车牌号</th>
+        <td>{$log.registration_no}</td>
+      </tr>
+      <tr>
+        <th>车架号</th>
+        <td>{$log.vin}</td>
+      </tr> -->
+      <tr>
+        <th>工单号</th>
+        <td>{$log.wip}</td>
+      </tr>
+      <!-- <tr>
+        <th>服务类型</th>
+        <td>{$log.service_type}</td>
+      </tr> -->
+      <tr>
+        <th>订单状态</th>
+        <td>{$log.normal_status|getNormalStatus}</td>
+      </tr>
+      <tr>
+        <th>开始时间</th>
+        <td>{$log.start_timestamp|date='Y-m-d H:i:s',###}</td>
+      </tr>
+      <tr>
+        <th>期望交车时间</th>
+        <td>{$log.taking_time|date='Y-m-d H:i:s',###}</td>
+      </tr>
+      <tr>
+        <th>维修顾问</th>
+        <td>{$sa_name}</td>
+      </tr>
+    </table>
+    
+  </div>
+  <center class="to-life">
+    <img src="__HOME_IMG__/icon/to-life.png" alt="">
+  </center>
+  
+</block>
+
+<block name="script">
+  <script type="text/javascript">
+    $(function(){
+      width = $(window).width();
+      $(".to-life").css('left',(width-$(".to-life").width())/2);
+
+      
+    });
+  </script>
+</block>
+
+
+
+
+
